@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.test</groupId>
-    <artifactId>spring-shiro</artifactId>
+    <artifactId>spring-demo</artifactId>
     <version>1.0.0</version>
     <packaging>war</packaging>
 
@@ -112,7 +112,7 @@
     </dependencies>
 
     <build>
-        <finalName>spring-shiro</finalName>
+        <finalName>spring-demo</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
