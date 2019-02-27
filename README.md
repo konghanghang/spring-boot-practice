@@ -1,7 +1,6 @@
 # spring-demo
 spring各种集成例子
 
-
 #### 分支和标签组成
 1. branch
     - spring-quartz-ram `[spring集成quartz，ram版本]`
