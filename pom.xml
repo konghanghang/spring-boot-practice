@@ -10,6 +10,7 @@
     <version>1.0.0</version>
     <modules>
         <module>zookeeper-election-master</module>
+        <module>zookeeper-api</module>
     </modules>
 
     <parent>
