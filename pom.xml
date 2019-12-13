@@ -11,6 +11,7 @@
     <modules>
         <module>zookeeper-election-master</module>
         <module>zookeeper-api</module>
+        <module>web-mvc</module>
     </modules>
 
     <parent>
