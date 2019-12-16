@@ -1,5 +1,6 @@
 package com.test.es.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.test.es.model.MappingFieldInfo;
 import com.test.es.service.IEsService;
 import org.junit.Test;
@@ -8,10 +9,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.annotation.Resource;
-
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -52,5 +56,50 @@ public class EsServiceImplTest {
         list.add(fieldInfo2);
         boolean indexWithCustomMapping = esService.createIndexWithCustomMapping("custom_20191213", "doc", list);
         System.out.println(indexWithCustomMapping);
+    }
+
+    @Test
+    public void insertRecord() {
+        // es_test
+        LocalDateTime local = LocalDateTime.now();
+        for (int i = 0; i < 10; i++) {
+            Map<String, Object> map = new HashMap<>();
+            map.put("id", i + 1);
+            map.put("name", "admin" + i);
+            map.put("age", i + 1);
+            map.put("createTime", local.minusMinutes(i + 1).format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS")));
+            esService.insertRecord(map, "es_test", "doc");
+        }
+    }
+
+    @Test
+    public void insertRecordBulk() {
+        List<Map<String, Object>> list = new ArrayList<>();
+        LocalDateTime local = LocalDateTime.now();
+        for (int i = 0; i < 10; i++) {
+            Map<String, Object> map = new HashMap<>();
+            map.put("id", i + 1);
+            map.put("name", "admin" + i);
+            map.put("age", i + 1);
+            map.put("createTime", local.minusMinutes(i + 1).format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS")));
+            list.add(map);
+        }
+        System.out.println(esService.insertRecordBulk(list, "es_test"));
+    }
+
+    @Test
+    public void deleteRecordById() {
+        List<String> indexs = new ArrayList<>();
+        indexs.add("es_test");
+        List<Map<String, Object>> doc = esService.query(indexs, "doc", null);
+        doc.stream().forEach(c -> esService.deleteRecordById("es_test", "doc", c.get("_id").toString()));
+    }
+
+    @Test
+    public void query() {
+        List<String> indexs = new ArrayList<>();
+        indexs.add("es_test");
+        List<Map<String, Object>> doc = esService.query(indexs, "doc", null);
+        doc.stream().forEach(c -> System.out.println(JSON.toJSONString(c)));
     }
 }
