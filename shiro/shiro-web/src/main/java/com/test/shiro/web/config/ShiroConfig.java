@@ -1,7 +1,10 @@
 package com.test.shiro.web.config;
 
+import com.test.shiro.web.config.rest.StatelessDefaultSubjectFactory;
 import com.test.shiro.web.realm.WebRealm;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
+import org.apache.shiro.mgt.DefaultSessionStorageEvaluator;
+import org.apache.shiro.mgt.DefaultSubjectDAO;
 import org.apache.shiro.mgt.SecurityManager;
 import org.apache.shiro.realm.Realm;
 import org.apache.shiro.session.mgt.DefaultSessionManager;
@@ -61,6 +64,18 @@ public class ShiroConfig {
         // 设置realm
         securityManager.setRealm(realm);
         securityManager.setSessionManager(sessionManager);
+        // 在无状态应用中需要禁用将Subject状态持久化到会话,需要注意的是，禁用使用Sessions 作为存储策略的实现，
+        // 但它没有完全地禁用Sessions。如果你的任何代码显式地调用subject.getSession()或subject.getSession(true)，
+        // 一个session 仍然会被创建。https://blog.csdn.net/peterwanghao/article/details/8295620
+        /*((DefaultSessionStorageEvaluator)(((DefaultSubjectDAO)securityManager
+                .getSubjectDAO())
+                .getSessionStorageEvaluator()))
+                .setSessionStorageEnabled(false);*/
+        DefaultSubjectDAO subjectDAO = (DefaultSubjectDAO)securityManager.getSubjectDAO();
+        DefaultSessionStorageEvaluator evaluator = (DefaultSessionStorageEvaluator) subjectDAO.getSessionStorageEvaluator();
+        evaluator.setSessionStorageEnabled(false);
+        StatelessDefaultSubjectFactory subjectFactory = new StatelessDefaultSubjectFactory(evaluator);
+        securityManager.setSubjectFactory(subjectFactory);
         return securityManager;
     }
 
