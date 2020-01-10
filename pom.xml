@@ -13,6 +13,7 @@
         <module>zookeeper-api</module>
         <module>elasticsearch</module>
         <module>web-mvc</module>
+        <module>shiro</module>
     </modules>
 
     <parent>
