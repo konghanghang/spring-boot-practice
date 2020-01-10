@@ -6,6 +6,7 @@ import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.SimpleAuthenticationInfo;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
+import org.apache.shiro.crypto.hash.Md5Hash;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 
@@ -59,8 +60,15 @@ public class WebRealm extends AuthorizingRealm {
         return authenticationInfo;
     }
 
+    /**
+     * 模拟从数据库按照用户名获取密码
+     * @param username
+     * @return
+     */
     private String getPasswordByUsername(String username) {
         System.out.println(username);
-        return "1234567";
+        Md5Hash md5Hash = new Md5Hash("1234567","test");
+        System.out.println(md5Hash.toString());
+        return md5Hash.toString();
     }
 }
