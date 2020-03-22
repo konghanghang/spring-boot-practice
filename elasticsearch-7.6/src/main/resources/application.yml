@@ -1,0 +1,20 @@
+spring:
+  elasticsearch:
+    jest:
+      uris: ${es.properties.schema}://${es.properties.host}:${es.properties.http_port}
+      username: ${es.properties.username}
+      password: ${es.properties.password}
+es:
+  properties:
+    username: elastic
+    password: elastic
+    cluster_name: es-7.6.1
+    host: node7.example.com
+    tcp_port: 9300
+    http_port: 9200
+    schema: https
+    pkcs_transport_file_path: elastic-certificates.p12
+    # 可选pkcs or pem，根据这里的填写，选择性的给pkcsFilePath和pemFilePath赋值
+    certificates_type: pkcs
+    pkcs_client_file_path: http.p12
+    pem_file_path: ca.crt
