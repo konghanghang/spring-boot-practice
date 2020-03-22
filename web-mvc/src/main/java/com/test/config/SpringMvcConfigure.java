@@ -1,11 +1,17 @@
 package com.test.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.test.interceptor.GlobalInterceptor;
+import com.test.interceptor.RequestArgumentResolver;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import javax.annotation.Resource;
+import java.util.List;
 
 /**
  * 自定义实现mvc配置
@@ -15,6 +21,9 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 @EnableWebMvc
 public class SpringMvcConfigure implements WebMvcConfigurer {
+
+    @Resource
+    private ObjectMapper objectMapper;
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
@@ -29,5 +38,10 @@ public class SpringMvcConfigure implements WebMvcConfigurer {
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/static/**").addResourceLocations("classpath:/static/");
         registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/webjars/");
+    }
+
+    @Override
+    public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
+        resolvers.add(new RequestArgumentResolver(objectMapper));
     }
 }
