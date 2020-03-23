@@ -110,7 +110,7 @@ public class JdbcUtils {
             conn = dataSource.getConnection();
             DatabaseMetaData metaData = conn.getMetaData();
             ResultSet tables = null;
-            if (datasourceInfo.getType().equals(DatasourceTypeEnum.ORACLE)) {
+            if (datasourceInfo.getType().equals(DatasourceTypeEnum.ORACLE.getType())) {
                 tables = metaData.getTables(null, datasourceInfo.getUsername().toUpperCase(), "%", new String[]{"TABLE"});
             } else {
                 tables = metaData.getTables(null, null, "%", new String[]{"TABLE"});

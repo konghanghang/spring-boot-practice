@@ -1,15 +1,19 @@
 package com.test.es.service.impl;
 
+import com.alibaba.fastjson.JSON;
+import com.carrotsearch.hppc.cursors.ObjectObjectCursor;
 import com.test.es.model.EsPage;
 import com.test.es.model.MappingFieldInfo;
 import com.test.es.service.IEsService;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpStatus;
+import org.elasticsearch.action.admin.cluster.state.ClusterStateResponse;
 import org.elasticsearch.action.admin.indices.create.CreateIndexRequestBuilder;
 import org.elasticsearch.action.admin.indices.create.CreateIndexResponse;
 import org.elasticsearch.action.admin.indices.delete.DeleteIndexRequestBuilder;
 import org.elasticsearch.action.admin.indices.exists.indices.IndicesExistsRequest;
 import org.elasticsearch.action.admin.indices.exists.indices.IndicesExistsResponse;
+import org.elasticsearch.action.admin.indices.get.GetIndexResponse;
 import org.elasticsearch.action.bulk.BulkRequestBuilder;
 import org.elasticsearch.action.bulk.BulkResponse;
 import org.elasticsearch.action.delete.DeleteResponse;
@@ -20,6 +24,9 @@ import org.elasticsearch.action.search.SearchType;
 import org.elasticsearch.action.support.IndicesOptions;
 import org.elasticsearch.action.support.master.AcknowledgedResponse;
 import org.elasticsearch.client.transport.TransportClient;
+import org.elasticsearch.cluster.metadata.IndexMetaData;
+import org.elasticsearch.cluster.metadata.MappingMetaData;
+import org.elasticsearch.common.collect.ImmutableOpenMap;
 import org.elasticsearch.common.text.Text;
 import org.elasticsearch.common.xcontent.XContentBuilder;
 import org.elasticsearch.common.xcontent.XContentFactory;
@@ -35,9 +42,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class EsServiceImpl implements IEsService {
@@ -152,6 +157,48 @@ public class EsServiceImpl implements IEsService {
             Map<String, Object> sourceAsMap = hit.getSourceAsMap();
             sourceAsMap.put("_id", id);
             list.add(sourceAsMap);
+        }
+        return list;
+    }
+
+    @Override
+    public Object getIndexMappings() {
+        String[] indices = ((GetIndexResponse)client.admin().indices().prepareGetIndex().execute().actionGet()).getIndices();
+        List<Map<String, Object>> list = new ArrayList();
+        int var5 = indices.length;
+        byte var6 = 0;
+        if (var6 < var5) {
+            String index = indices[var6];
+            Map<String, Object> mappingInfo = new HashMap<>();
+            list.add(mappingInfo);
+            mappingInfo.put("indexName", index);
+            ImmutableOpenMap<String, MappingMetaData> mappings = ((IndexMetaData)((ClusterStateResponse)client.admin().cluster().prepareState().execute().actionGet()).getState().getMetaData().getIndices().get(index)).getMappings();
+            Iterator iterator = mappings.iterator();
+
+            while(iterator.hasNext()) {
+                ObjectObjectCursor<String, MappingMetaData> cursor = (ObjectObjectCursor)iterator.next();
+                if (((String)cursor.key).equals("doc")) {
+                    String source = (cursor.value).source().toString();
+                    Map map = JSON.parseObject(source, Map.class);
+                    Map<String, Object> doc = (Map)map.get("doc");
+                    Map<String, Object> properties = (Map)doc.get("properties");
+                    List<Map<String, String>> fields = new ArrayList();
+                    Iterator propertiesIterator = properties.entrySet().iterator();
+
+                    while(propertiesIterator.hasNext()) {
+                        Map.Entry<String, Object> entry = (Map.Entry)propertiesIterator.next();
+                        String key = (String)entry.getKey();
+                        Map<String, Object> value = (Map)entry.getValue();
+                        String type = value.get("type").toString();
+                        Map<String, String> field = new HashMap();
+                        field.put("name", key);
+                        field.put("type", type);
+                        fields.add(field);
+                    }
+                    mappingInfo.put("fields", fields);
+                    break;
+                }
+            }
         }
         return list;
     }

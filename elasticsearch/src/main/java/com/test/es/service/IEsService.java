@@ -28,4 +28,6 @@ public interface IEsService {
 
     List<Map<String, Object>> query(List<String> index, String type, Map<String, Object> condition);
 
+    Object getIndexMappings();
+
 }
