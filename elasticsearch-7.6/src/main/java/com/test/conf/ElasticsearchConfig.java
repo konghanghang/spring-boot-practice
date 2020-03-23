@@ -97,11 +97,7 @@ public class ElasticsearchConfig {
         SSLContextBuilder sslContextBuilder = SSLContexts.custom().loadTrustMaterial(keyStore, (x509Certificates, s) -> true);
         final SSLContext sslContext = sslContextBuilder.build();
         RestClientBuilder builder = RestClient.builder(new HttpHost(elasticsearchProperties.getHost(), elasticsearchProperties.getHttpPort(), elasticsearchProperties.getSchema()));
-        builder.setHttpClientConfigCallback(httpClientBuilder -> {
-            httpClientBuilder.setSSLContext(sslContext);
-            httpClientBuilder.setDefaultCredentialsProvider(credentialsProvider);
-            return httpClientBuilder;
-        });
+        builder.setHttpClientConfigCallback(httpClientBuilder -> httpClientBuilder.setSSLContext(sslContext).setDefaultCredentialsProvider(credentialsProvider));
         return builder;
     }
 

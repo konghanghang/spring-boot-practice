@@ -15,6 +15,7 @@
         <module>web-mvc</module>
         <module>kafka</module>
         <module>elasticsearch-7.6</module>
+        <module>sql-tool</module>
     </modules>
 
     <parent>
