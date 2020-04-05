@@ -2,6 +2,8 @@ package com.test.config;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.test.interceptor.GlobalInterceptor;
+import com.test.interceptor.RequestDataReader;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -13,6 +15,12 @@ import java.util.Locale;
 public class BeanConfigure {
 
     @Bean
+    @ConditionalOnMissingBean(name = "requestDataReader")
+    public RequestDataReader getRequestDataReader() {
+        return new RequestDataReader(getObjectMapper());
+    }
+
+    @Bean
     @ConditionalOnMissingBean
     public ObjectMapper getObjectMapper() {
         ObjectMapper mapper = new ObjectMapper();
@@ -22,5 +30,12 @@ public class BeanConfigure {
         mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
         return mapper;
     }
+
+    @Bean
+    @ConditionalOnMissingBean(name = "globalInterceptor")
+    public GlobalInterceptor getGlobalInterceptor() {
+        return new GlobalInterceptor(getRequestDataReader());
+    }
+
 
 }

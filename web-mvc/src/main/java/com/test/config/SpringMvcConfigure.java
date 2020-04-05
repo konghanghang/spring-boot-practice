@@ -24,10 +24,12 @@ public class SpringMvcConfigure implements WebMvcConfigurer {
 
     @Resource
     private ObjectMapper objectMapper;
+    @Resource
+    private GlobalInterceptor globalInterceptor;
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(new GlobalInterceptor());
+        registry.addInterceptor(globalInterceptor);
     }
 
     /**

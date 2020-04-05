@@ -1,6 +1,8 @@
 package com.test.controller;
 
+import com.test.annotation.Login;
 import com.test.vo.AccountModel;
+import com.test.vo.TestVo;
 import com.test.vo.UserVo;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,6 +28,12 @@ public class IndexController {
     @PostMapping("/modelAttributeTest")
     public Object modelAttributeTest(AccountModel accountModel){
         return accountModel.toString();
+    }
+
+    @RequestMapping("/customResovlerTest")
+    @Login
+    public Object customResovlerTest(AccountModel accountModel, TestVo testVo){
+        return accountModel.toString() + "---" + testVo.toString();
     }
 
 }

@@ -4,13 +4,11 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpInputMessage;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpRequest;
 import org.springframework.http.MediaType;
 
-import javax.annotation.Resource;
 import javax.validation.constraints.NotNull;
 import java.io.IOException;
 import java.io.InputStream;
@@ -20,14 +18,16 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
 
-@Configuration
 public class RequestDataReader {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(RequestDataReader.class);
     protected static final Set<HttpMethod> SUPPORTED_METHODS = EnumSet.of(HttpMethod.POST, HttpMethod.PUT, HttpMethod.PATCH);
 
-    @Resource
     private ObjectMapper objectMapper;
+
+    public RequestDataReader(ObjectMapper objectMapper){
+        this.objectMapper = objectMapper;
+    }
 
     public boolean canRead(@NotNull HttpInputMessage message) {
         MediaType mediaType = message.getHeaders().getContentType();
