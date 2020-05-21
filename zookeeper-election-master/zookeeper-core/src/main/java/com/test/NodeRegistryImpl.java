@@ -15,6 +15,8 @@ public class NodeRegistryImpl implements INodeRegistry, Watcher {
     private ZooKeeper zk;
     private String nodeName;
 
+    private String zkServers;
+
     private static final int SESSION_TIMEOUT = 5000;
 
     private static final String REGISTRY_PATH = "/registry";
@@ -26,6 +28,7 @@ public class NodeRegistryImpl implements INodeRegistry, Watcher {
 
     public NodeRegistryImpl(String zkServers, String nodeName) {
         try {
+            this.zkServers = zkServers;
             zk = new ZooKeeper(zkServers, SESSION_TIMEOUT, this);
             latch.await();
             this.nodeName = nodeName;
@@ -70,6 +73,14 @@ public class NodeRegistryImpl implements INodeRegistry, Watcher {
             } catch (KeeperException | InterruptedException e) {
                 logger.info("master节点下线，重新选举master");
                 electionMaster();
+            }
+        } else if (watchedEvent.getState() == Event.KeeperState.Expired) {
+            logger.info("zk session expired, reconnect....");
+            try {
+                zk = new ZooKeeper(zkServers, SESSION_TIMEOUT, this);
+                logger.info("reconnected to zookeeper");
+            } catch (Exception ex) {
+                logger.error("reconnect zookeeper client failure", ex);
             }
         }
     }
