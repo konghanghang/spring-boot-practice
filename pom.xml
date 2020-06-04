@@ -17,6 +17,7 @@
         <module>shiro</module>
         <module>elasticsearch-7.6</module>
         <module>sql-tool</module>
+        <module>spark</module>
     </modules>
 
     <parent>
