@@ -1,4 +1,4 @@
-package com.test.conf;
+package com.test.config;
 
 import io.searchbox.client.config.HttpClientConfig;
 import org.apache.http.conn.ssl.NoopHostnameVerifier;

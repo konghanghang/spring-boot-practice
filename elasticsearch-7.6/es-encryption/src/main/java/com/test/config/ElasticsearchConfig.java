@@ -1,4 +1,4 @@
-package com.test.conf;
+package com.test.config;
 
 import org.apache.http.HttpHost;
 import org.apache.http.auth.AuthScope;
