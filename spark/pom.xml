@@ -24,6 +24,11 @@
             </exclusions>
         </dependency>
         <dependency>
+            <groupId>org.apache.spark</groupId>
+            <artifactId>spark-sql_2.11</artifactId>
+            <version>2.4.5</version>
+        </dependency>
+        <dependency>
             <groupId>org.apache.hadoop</groupId>
             <artifactId>hadoop-client</artifactId>
             <version>3.2.1</version>
@@ -32,6 +37,10 @@
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
             <version>27.0-jre</version>
+        </dependency>
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
         </dependency>
     </dependencies>
 
@@ -47,11 +56,11 @@
                     </descriptorRefs>
                     <archive>
                         <manifest>
-                            <maniClass></maniClass>
+                            <maniClass>com.test.App</maniClass>
                         </manifest>
                     </archive>
                 </configuration>
-                <executions>
+                <!--<executions>
                     <execution>
                         <id>make-assembly</id>
                         <phase>package</phase>
@@ -59,9 +68,9 @@
                             <goal>single</goal>
                         </goals>
                     </execution>
-                </executions>
+                </executions>-->
             </plugin>
-            <plugin>
+            <!--<plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
                 <executions>
@@ -75,9 +84,9 @@
                     <executable>java</executable>
                     <includeProjectDependencies>false</includeProjectDependencies>
                     <classpathScope>compile</classpathScope>
-                    <mainClass>com.dt.spark.SparkApps.App</mainClass>
+                    <mainClass>com.test.App</mainClass>
                 </configuration>
-            </plugin>
+            </plugin>-->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
