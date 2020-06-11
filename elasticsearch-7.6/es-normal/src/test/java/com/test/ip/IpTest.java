@@ -7,6 +7,8 @@ import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
+import java.util.ArrayList;
+import java.util.List;
 
 public class IpTest {
 
@@ -34,10 +36,8 @@ public class IpTest {
         long firstIndex = firstIndexBig.longValue();
         // 570063
         System.out.println("索引区第一条记录的偏移:" + firstIndex);
-        String ipV6Address = getFormatedAddress("2001:da8:202:10::36");
-        bytes = instance.readBytes(firstIndex + 8 * 2, 8);
-        System.out.println(instance.byteArrayToLong(bytes));
-        BigInteger ipNum = ipv6ToNum("2001:4860:4860::8888");
+        // 2001:da8:202:10::36
+        BigInteger ipNum = ipv6ToNum("2409:8754:2:1::d24c:4b55");
         BigInteger ip = ipNum.shiftRight(64).and(new BigInteger("FFFFFFFFFFFFFFFF", 16));
         System.out.println(ip.toString());
         // 查找ip的索引偏移
@@ -52,7 +52,29 @@ public class IpTest {
         // 278917
         System.out.println(ip_rec_off_big.longValue());
         String addr = getAddr(ip_rec_off_big.longValue(), offsetLen, instance);
+        bytes = instance.readBytes(ip_off, 8);
+        BigInteger bigInteger = byteArrayToLong(bytes);
+        long begin = byteToLong(bytes);
+        String i1 = numToV6(begin);
+        String i2;
+        try {
+            bytes = instance.readBytes(ip_off + 8 + offsetLen, 8);
+            long end = byteToLong(bytes);
+            i2 = numToV6(end - 1);
+        } catch (Exception e) {
+            i2 = "FFFF:FFFF:FFFF:FFFF::";
+        }
+        if (ipNum.intValue() == 0x1) {
+            i1 = "0:0:0:0:0:0:0:1";
+            i2 = "0:0:0:0:0:0:0:1";
+            addr = "本机地址";
+        }
         System.out.println(addr);
+        System.out.println(i1);
+        System.out.println(i2);
+        long l = ipv4ToNum("192.168.13.24");
+        System.out.println(new BigInteger(((l >> 16) & 0xFFFF) + "").toString(16));
+        System.out.println(new BigInteger((l & 0xFFFF) + "").toString(16));
     }
 
     private static long find (BigInteger ip, long l, long r, int offsetLen, long firstIndex, IpAddress instance){
@@ -130,173 +152,19 @@ public class IpTest {
         return i;
     }
 
-    private static String getFormatedAddress(String addr) {
-        String[] addrSegs = addr.split(":");
-        StringBuilder retStrObj = new StringBuilder();
-        int segLength = addrSegs.length;
-
-        for (int i = 0; i < segLength; i++) {
-            retStrObj.append(ensureLength(addrSegs[i], 4)).append(":");
-        }
-
-        return retStrObj.toString();
-    }
-
-    /**
-     * Ensure length is16.
-     *
-     * @param value the value
-     * @return the string
-     */
-    private static String ensureLength(String value, int length) {
-        int curLen = value.length();
-        if (curLen < length) {
-            String lPadStr = repeat('0', length - curLen);
-            return lPadStr + value;
-        } else if (curLen > length) {
-            return value.substring(0, length);
-        }
-        return value;
-    }
-
-    /**
-     * Repeat.
-     *
-     * @param ch     the ch
-     * @param repeat the repeat
-     * @return the string
-     */
-    public static String repeat(char ch, int repeat) {
-        char buf[] = new char[repeat];
-        for (int i = repeat - 1; i >= 0; i--) {
-            buf[i] = ch;
-        }
-
-        return new String(buf);
-    }
-
-    /**
-     * 从IP段获取数字类型表示
-     *
-     * @param ipSeg 格式化好的IP段，至少是前4段
-     * @return the long from ip seg
-     */
-    private static BigInteger getBigIntegerFromIPSeg(String ipSeg) {
-        String noneStyleIP = ipSeg.substring(0, 19).replace(":", "");
-
-        return new BigInteger(noneStyleIP, 16);
-    }
-
-    /**
-     *
-     * 将字符串形式的ip地址转换为BigInteger
-     *
-     * @param ipInString
-     *
-     *            字符串形式的ip地址
-     *
-     * @return 整数形式的ip地址
-     */
-    public static BigInteger StringToBigInt(String ipInString) {
-
-        ipInString = ipInString.replace(" ", "");
-
-        byte[] bytes;
-
-        if (ipInString.contains(":")) {
-            bytes = ipv6ToBytes(ipInString);
-        } else {
-            bytes = ipv4ToBytes(ipInString);
-        }
-        return new BigInteger(bytes);
-    }
-
-    /**
-     *
-     * ipv6地址转有符号byte[17]
-     *
-     * @param ipv6
-     *            字符串形式的IP地址
-     *
-     * @return big integer number
-     */
-    private static byte[] ipv6ToBytes(String ipv6) {
-
-        byte[] ret = new byte[17];
-        ret[0] = 0;
-        int ib = 16;
-
-        boolean comFlag = false;// ipv4混合模式标记
-        if (ipv6.startsWith(":")) {// 去掉开头的冒号
-            ipv6 = ipv6.substring(1);
-        }
-        String groups[] = ipv6.split(":");
-
-        for (int ig = groups.length - 1; ig > -1; ig--) {// 反向扫描
-            if (groups[ig].contains(".")) {
-                // 出现ipv4混合模式
-                byte[] temp = ipv4ToBytes(groups[ig]);
-                ret[ib--] = temp[4];
-                ret[ib--] = temp[3];
-                ret[ib--] = temp[2];
-                ret[ib--] = temp[1];
-                comFlag = true;
-            } else if ("".equals(groups[ig])) {
-                // 出现零长度压缩,计算缺少的组数
-                int zlg = 9 - (groups.length + (comFlag ? 1 : 0));
-                while (zlg-- > 0) {// 将这些组置0
-                    ret[ib--] = 0;
-                    ret[ib--] = 0;
-                }
-            } else {
-                int temp = Integer.parseInt(groups[ig], 16);
-                ret[ib--] = (byte) temp;
-                ret[ib--] = (byte) (temp >> 8);
-            }
-        }
-        return ret;
-    }
-
-    /**
-     *
-     * ipv4地址转有符号byte[5]
-     *
-     * @param ipv4
-     *            字符串的IPV4地址
-     *
-     * @return big integer number
-     */
-    private static byte[] ipv4ToBytes(String ipv4) {
-        byte[] ret = new byte[5];
-        ret[0] = 0;
-
-        // 先找到IP地址字符串中.的位置
-
-        int position1 = ipv4.indexOf(".");
-        int position2 = ipv4.indexOf(".", position1 + 1);
-        int position3 = ipv4.indexOf(".", position2 + 1);
-
-        // 将每个.之间的字符串转换成整型
-
-        ret[1] = (byte) Integer.parseInt(ipv4.substring(0, position1));
-        ret[2] = (byte) Integer.parseInt(ipv4.substring(position1 + 1,
-                position2));
-        ret[3] = (byte) Integer.parseInt(ipv4.substring(position2 + 1,
-                position3));
-        ret[4] = (byte) Integer.parseInt(ipv4.substring(position3 + 1));
-
-        return ret;
-    }
-
     public static BigInteger ipv6ToNum(String ipStr) {
         // String ipStr = "2400:3200::1";
         int ipCount = 8;
         String[] parts = ipStr.split(":");
+        if (parts[parts.length - 1].contains(".")) {
+            long l = ipv4ToNum(parts[parts.length - 1]);
+            System.out.println((l >> 16) & 0xFFFF);
+            System.out.println(l & 0xFFFF);
+        }
         int emptyIndex = -1;
         for (int i = 0; i < parts.length; i++) {
             if (StringUtils.isEmpty(parts[i])) {
                 emptyIndex = i;
-                break;
             }
         }
         int parts_hi, parts_lo, parts_skipped;
@@ -340,25 +208,42 @@ public class IpTest {
                 }
                 ipNum = ipNum.or(bigInteger);
             }
-            ipNum = ipNum.shiftLeft(16 * parts_skipped);
-            for (int i = -parts_lo; i < 0; i++) {
-                // ipNum <<= 16;
-                ipNum = ipNum.shiftLeft(16);
-                String part = parts[parts.length + i];
-                if (part.length() > 4) {
-                    System.out.println("error ip address");
-                }
-                BigInteger bigInteger = new BigInteger(part, 16);
-                int i1 = bigInteger.intValue();
-                if (i1 > 0xFFFF) {
-                    System.out.println("error ip address");
-                }
-                // ipNum |= i1;
-                ipNum = ipNum.or(bigInteger);
-            }
         }
+        ipNum = ipNum.shiftLeft(16 * parts_skipped);
+        for (int i = -parts_lo; i < 0; i++) {
+            // ipNum <<= 16;
+            ipNum = ipNum.shiftLeft(16);
+            String part = parts[parts.length + i];
+            if (part.length() > 4) {
+                System.out.println("error ip address");
+            }
+            BigInteger bigInteger = new BigInteger(part, 16);
+            int i1 = bigInteger.intValue();
+            if (i1 > 0xFFFF) {
+                System.out.println("error ip address");
+            }
+            // ipNum |= i1;
+            ipNum = ipNum.or(bigInteger);
+        }
+
         System.out.println(ipNum);
         return ipNum;
+    }
+
+    public static long ipv4ToNum(String ipStr) {
+        long result = 0;
+        String[] split = ipStr.split("\\.");
+        if (split.length != 4) {
+            System.out.println("error ip address");
+        }
+        for (int i = 0; i < split.length; i++) {
+            int s = Integer.valueOf(split[i]);
+            if (s > 255) {
+                System.out.println("error ip address");
+            }
+            result = (result << 8) | s;
+        }
+        return result;
     }
 
     /**
@@ -406,5 +291,25 @@ public class IpTest {
         buffer.flip();
         System.out.println(buffer.getInt());
         return buffer.getLong();
+    }
+
+    private static String numToV6(long num) {
+        List<Long> addresslist = new ArrayList<>();
+        addresslist.add((num>>48)&0xffff);
+        addresslist.add((num>>32)&0xffff);
+        addresslist.add((num>>16)&0xffff);
+        addresslist.add(num&0xffff);
+        List<String> hexStr = new ArrayList<>();
+        for (Long aLong : addresslist) {
+            String s = new BigInteger(aLong.toString()).toString(16).toUpperCase();
+            if (s.length() < 4) {
+                int max = 4 - s.length();
+                for (int i = 0; i < max; i++) {
+                    s = "0" + s;
+                }
+            }
+            hexStr.add(s);
+        }
+        return StringUtils.join(hexStr, ":") + "::";
     }
 }

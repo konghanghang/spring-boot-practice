@@ -21,7 +21,7 @@ import java.util.regex.Pattern;
 public class IpAddress {
 
     //数据库地址
-    private String dataPath = "/Users/konghang/Downloads/ip/ipv6wry.db";
+    private String dataPath = "D:\\project\\idea\\spring-boot-demo\\elasticsearch-7.6\\es-normal\\src\\test\\java\\com\\test\\ipv6wry.db";
     //随机文件访问类
     private RandomAccessFile ipFile = null;
     //单一模式实例
