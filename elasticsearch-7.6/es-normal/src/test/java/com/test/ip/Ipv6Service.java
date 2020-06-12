@@ -2,7 +2,6 @@ package com.test.ip;
 
 import org.apache.commons.lang3.StringUtils;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.io.UnsupportedEncodingException;
@@ -18,7 +17,8 @@ public class Ipv6Service {
     //单一模式实例
     private static Ipv6Service instance = new Ipv6Service();
 
-    private RandomAccessFile randomAccessFile = null;
+    // private RandomAccessFile randomAccessFile = null;
+    private byte[] v6Data;
     // 偏移地址长度
     private int offsetLen;
     // 索引区第一条记录的偏移
@@ -32,8 +32,11 @@ public class Ipv6Service {
 
     private Ipv6Service() {
         try {
-            randomAccessFile = new RandomAccessFile(file, "r");
-        } catch (FileNotFoundException e) {
+            RandomAccessFile randomAccessFile = new RandomAccessFile(file, "r");
+            RandomAccessFile randomAccessFile1 = new RandomAccessFile(file, "r");
+            v6Data = new byte[(int) randomAccessFile.length()];
+            randomAccessFile.readFully(v6Data, 0, v6Data.length);
+        } catch (IOException e) {
             System.out.println("读取文件失败！");
         }
         // 获取偏移地址长度
@@ -60,17 +63,10 @@ public class Ipv6Service {
 
     private byte[] readBytes(long offset, int num) {
         byte[] ret = new byte[num];
-        try {
-            randomAccessFile.seek(offset);
-            for(int i=0; i != num; i++) {
-                ret[i] = randomAccessFile.readByte();
-            }
-            return ret;
-        } catch (IOException e) {
-            e.printStackTrace();
-            System.out.println("读取文件失败_readBytes");
-            return ret;
+        for(int i=0; i < num; i++) {
+            ret[i] = v6Data[(int) (offset + i)];
         }
+        return ret;
     }
 
     /**
@@ -301,8 +297,7 @@ public class Ipv6Service {
 
     private long findEnd(long offset) {
         int i = Long.valueOf(offset).intValue();
-        long l = i + Long.MAX_VALUE;
-        for (; i < Long.MAX_VALUE; i++) {
+        for (; i < v6Data.length; i++) {
             byte[] bytes = readBytes(i, 1);
             if ("\0".equals(new String(bytes))) {
                 break;
