@@ -12,7 +12,8 @@ import java.util.List;
 
 public class Ipv6Service {
 
-    private String file = "D:\\project\\idea\\spring-boot-demo\\elasticsearch-7.6\\es-normal\\src\\test\\resources\\ipv6wry.db";
+    //private String file = "D:\\project\\idea\\spring-boot-demo\\elasticsearch-7.6\\es-normal\\src\\test\\resources\\ipv6wry.db";
+    private String file = "/Users/konghang/Downloads/ip/ipv6wry.db";
 
     //单一模式实例
     private static Ipv6Service instance = new Ipv6Service();
@@ -31,9 +32,7 @@ public class Ipv6Service {
     }
 
     private Ipv6Service() {
-        try {
-            RandomAccessFile randomAccessFile = new RandomAccessFile(file, "r");
-            RandomAccessFile randomAccessFile1 = new RandomAccessFile(file, "r");
+        try(RandomAccessFile randomAccessFile = new RandomAccessFile(file, "r")) {
             v6Data = new byte[(int) randomAccessFile.length()];
             randomAccessFile.readFully(v6Data, 0, v6Data.length);
         } catch (IOException e) {
@@ -76,11 +75,14 @@ public class Ipv6Service {
      * @return ret
      */
     private BigInteger byteArrayToLong(byte[] b) {
-        // long ret = 0;
         BigInteger ret = new BigInteger("0");
-        for(int i=0; i<b.length; i++) {
-            Long temp = b[i] << (0x8 * i) & (0xFF * (long)(Math.pow(0x100,i)));
-            ret = ret.or(new BigInteger(temp.toString()));
+        // 循环读取每个字节通过移位运算完成long的8个字节拼装
+        for(int i = 0; i < b.length; i++){
+            // value |=((long)0xff << shift) & ((long)b[i] << shift);
+            int shift = i << 3;
+            BigInteger shiftY = new BigInteger("ff", 16);
+            BigInteger data = new BigInteger(b[i] + "");
+            ret = ret.or(shiftY.shiftLeft(shift).and(data.shiftLeft(shift)));
         }
         return ret;
     }
@@ -98,37 +100,12 @@ public class Ipv6Service {
         long m = (l + r) / 2;
         long o = firstIndex + m * (8 + offsetLen);
         byte[] bytes = readBytes(o,  8);
-        long l1 = byteToLong(bytes);
-        //BigInteger new_ip = byteArrayToLong(bytes);
-        BigInteger new_ip = new BigInteger(l1 + "");
+        BigInteger new_ip = byteArrayToLong(bytes);
         if (ip.compareTo(new_ip) == -1) {
             return find(ip, l, m);
         } else {
             return find(ip, m, r);
         }
-    }
-
-    private long byteToLong(byte[] b) {
-        long s = 0;
-        long s0 = b[0] & 0xff;// 最低位
-        long s1 = b[1] & 0xff;
-        long s2 = b[2] & 0xff;
-        long s3 = b[3] & 0xff;
-        long s4 = b[4] & 0xff;// 最低位
-        long s5 = b[5] & 0xff;
-        long s6 = b[6] & 0xff;
-        long s7 = b[7] & 0xff;
-
-        // s0不变
-        s1 <<= 8;
-        s2 <<= 16;
-        s3 <<= 24;
-        s4 <<= 8 * 4;
-        s5 <<= 8 * 5;
-        s6 <<= 8 * 6;
-        s7 <<= 8 * 7;
-        s = s0 | s1 | s2 | s3 | s4 | s5 | s6 | s7;
-        return s;
     }
 
     public static long ipv4ToNum(String ipStr) {
@@ -161,9 +138,6 @@ public class Ipv6Service {
             // (l >> 16) & 0xFFFF;
             parts.add(new BigInteger(((l >> 16) & 0xFFFF) + "").toString(16));
             parts.add(new BigInteger((l & 0xFFFF) + "").toString(16));
-            System.out.println((l >> 16) & 0xFFFF);
-            System.out.println(l & 0xFFFF);
-            parts.stream().forEach(a -> System.out.print(a + ":"));
         }
         int emptyIndex = -1;
         for (int i = 0; i < parts.size(); i++) {
