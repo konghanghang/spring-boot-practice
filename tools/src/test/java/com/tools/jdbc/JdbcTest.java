@@ -1,8 +1,8 @@
-package com.test;
+package com.tools.jdbc;
 
-import com.sql.constant.DatasourceTypeEnum;
-import com.sql.model.DatasourceInfo;
-import com.sql.tool.JdbcUtils;
+import com.tools.jdbc.constant.DatasourceTypeEnum;
+import com.tools.jdbc.model.DatasourceInfo;
+import com.tools.jdbc.tool.JdbcUtils;
 import org.junit.Assert;
 import org.junit.Test;
 

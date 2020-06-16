@@ -1,4 +1,4 @@
-package com.test.ip;
+package com.tools.ip.ipv6;
 
 import org.apache.commons.lang3.StringUtils;
 

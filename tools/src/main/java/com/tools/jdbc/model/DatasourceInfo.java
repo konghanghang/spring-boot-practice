@@ -1,4 +1,4 @@
-package com.sql.model;
+package com.tools.jdbc.model;
 
 public class DatasourceInfo {
 

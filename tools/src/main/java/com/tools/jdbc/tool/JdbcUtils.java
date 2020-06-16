@@ -1,11 +1,11 @@
-package com.sql.tool;
+package com.tools.jdbc.tool;
 
 import com.alibaba.druid.pool.DruidDataSource;
 import com.alibaba.druid.pool.DruidPooledConnection;
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
-import com.sql.constant.DatasourceTypeEnum;
-import com.sql.model.DatasourceInfo;
+import com.tools.jdbc.constant.DatasourceTypeEnum;
+import com.tools.jdbc.model.DatasourceInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

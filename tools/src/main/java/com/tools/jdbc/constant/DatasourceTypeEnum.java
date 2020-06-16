@@ -1,4 +1,4 @@
-package com.sql.constant;
+package com.tools.jdbc.constant;
 
 public enum DatasourceTypeEnum {
 

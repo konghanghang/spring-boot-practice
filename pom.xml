@@ -16,8 +16,8 @@
         <module>kafka</module>
         <module>shiro</module>
         <module>elasticsearch-7.6</module>
-        <module>sql-tool</module>
         <module>spark</module>
+        <module>tools</module>
     </modules>
 
     <parent>
@@ -139,12 +139,6 @@
                 <groupId>mysql</groupId>
                 <artifactId>mysql-connector-java</artifactId>
                 <version>5.1.46</version>
-            </dependency>
-            <!--分页插件-->
-            <dependency>
-                <groupId>com.github.pagehelper</groupId>
-                <artifactId>pagehelper</artifactId>
-                <version>5.0.0</version>
             </dependency>
 
 

@@ -1,5 +1,6 @@
-package com.test.ip;
+package com.tools.ip;
 
+import com.tools.ip.ipv6.Ipv6Service;
 import org.junit.Test;
 
 import java.math.BigInteger;

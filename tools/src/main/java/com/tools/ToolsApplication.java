@@ -1,13 +1,13 @@
-package com.sql;
+package com.tools;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class SqlApplication {
+public class ToolsApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(SqlApplication.class, args);
+        SpringApplication.run(ToolsApplication.class, args);
     }
 
 }
