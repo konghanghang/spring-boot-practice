@@ -11,7 +11,7 @@ import java.util.Arrays;
 import java.util.List;
 
 /**
- * ip库来源：http://ip.ss.zxinc.org/
+ * ip库来源：http://ip.zxinc.org/
  * 以下所有数据类型(short/int/int64/IP地址/偏移地址等)均为小端序
  *
  * 文件头
@@ -72,13 +72,13 @@ public class Ipv6Service {
         offsetLen = bytes[0];
         // 索引区第一条记录的偏移
         bytes = readBytes(16, 8);
-        BigInteger firstIndexBig = byteArrayToLong(bytes);
+        BigInteger firstIndexBig = byteArrayToBigInteger(bytes);
         firstIndex = firstIndexBig.longValue();
         // 570063
         System.out.println("索引区第一条记录的偏移:" + firstIndex);
         // 总记录数
         bytes = readBytes(8, 8);
-        BigInteger indexCountBig = byteArrayToLong(bytes);
+        BigInteger indexCountBig = byteArrayToBigInteger(bytes);
         indexCount = indexCountBig.longValue();
     }
 
@@ -103,7 +103,7 @@ public class Ipv6Service {
      * @param b
      * @return ret
      */
-    private BigInteger byteArrayToLong(byte[] b) {
+    private BigInteger byteArrayToBigInteger(byte[] b) {
         BigInteger ret = new BigInteger("0");
         // 循环读取每个字节通过移位运算完成long的8个字节拼装
         for(int i = 0; i < b.length; i++){
@@ -129,7 +129,7 @@ public class Ipv6Service {
         long m = (l + r) >>> 1;
         long o = firstIndex + m * (8 + offsetLen);
         byte[] bytes = readBytes(o,  8);
-        BigInteger new_ip = byteArrayToLong(bytes);
+        BigInteger new_ip = byteArrayToBigInteger(bytes);
         if (ip.compareTo(new_ip) == -1) {
             return find(ip, l, m);
         } else {
@@ -246,7 +246,7 @@ public class Ipv6Service {
 
     public long getIpRecOff(long ip_off) {
         byte[] bytes = readBytes(ip_off + 8, offsetLen);
-        BigInteger ip_rec_off_big = byteArrayToLong(bytes);
+        BigInteger ip_rec_off_big = byteArrayToBigInteger(bytes);
         return ip_rec_off_big.longValue();
     }
 
@@ -258,7 +258,7 @@ public class Ipv6Service {
             // [IP][0x01][国家和地区信息的绝对偏移地址]
             // 使用接下来的3字节作为偏移量调用字节取得信息
             bytes = readBytes(offset + 1, offsetLen);
-            BigInteger l = byteArrayToLong(bytes);
+            BigInteger l = byteArrayToBigInteger(bytes);
             return getAddr(l.longValue());
         } else {
             // 重定向模式2 + 正常模式
@@ -280,7 +280,7 @@ public class Ipv6Service {
         int num = bytes[0];
         if (num == 1 || num == 2) {
             bytes = readBytes(offset + 1, offsetLen);
-            BigInteger p = byteArrayToLong(bytes);
+            BigInteger p = byteArrayToBigInteger(bytes);
             return getAreaAddr(p.longValue());
         } else {
             return getString(offset);
