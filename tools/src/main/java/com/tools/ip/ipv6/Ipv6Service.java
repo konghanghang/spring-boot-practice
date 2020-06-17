@@ -10,6 +10,35 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * ip库来源：http://ip.ss.zxinc.org/
+ * 以下所有数据类型(short/int/int64/IP地址/偏移地址等)均为小端序
+ *
+ * 文件头
+ * 0~3	    字符串	"IPDB"
+ * 4-5	    short	版本号,现在是2。版本号0x01到0xFF之间保证互相兼容。
+ * 6	    byte	偏移地址长度(2~8)
+ * 7	    byte	IP地址长度(4或8或12或16, 现在只支持4(ipv4)和8(ipv6))
+ * 8~15	    int64	记录数
+ * 16-23	int64	索引区第一条记录的偏移
+ * 24	    byte	地址字段数(1~255)[版本咕咕咕新增,现阶段默认为2]
+ * 25-31	reserve	保留,用00填充
+ * 32~39	int64	数据库版本字符串的偏移[版本2新增,版本1没有]
+ *
+ * 记录区
+ * array 字符串[地址字段数]
+ * 	与qqwry.dat大致相同,但是没有结束IP地址
+ * 	01开头的废弃不用
+ * 	02+偏移地址[偏移长度]表示重定向
+ * 	20~FF开头的为正常的字符串,采用UTF-8编码,以NULL结尾
+ *
+ * 索引区
+ * struct{
+ * 	IP[IP地址长度]	开始IP地址
+ * 	偏移[偏移长度]	记录偏移地址
+ * }索引[记录数];
+ *
+ */
 public class Ipv6Service {
 
     //private String file = "D:\\project\\idea\\spring-boot-demo\\elasticsearch-7.6\\es-normal\\src\\test\\resources\\ipv6wry.db";
@@ -97,7 +126,7 @@ public class Ipv6Service {
     public long find (BigInteger ip, long l, long r){
         if (r - l <= 1)
             return l;
-        long m = (l + r) / 2;
+        long m = (l + r) >>> 1;
         long o = firstIndex + m * (8 + offsetLen);
         byte[] bytes = readBytes(o,  8);
         BigInteger new_ip = byteArrayToLong(bytes);
