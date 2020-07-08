@@ -10,6 +10,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>cloud</artifactId>
+    <packaging>pom</packaging>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -18,6 +19,9 @@
     <modules>
         <module>eureka-7001</module>
         <module>eureka-7002</module>
+        <module>api</module>
+        <module>provider-8001</module>
+        <module>consumer-dept-8080</module>
     </modules>
 
 

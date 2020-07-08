@@ -1,0 +1,13 @@
+package com.test.cloud;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class Consumer8080 {
+
+    public static void main(String[] args) {
+        SpringApplication.run(Consumer8080.class, args);
+    }
+
+}

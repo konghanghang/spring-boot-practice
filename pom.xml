@@ -59,7 +59,7 @@
             <dependency>
                 <groupId>com.alibaba</groupId>
                 <artifactId>fastjson</artifactId>
-                <version>1.2.46</version>
+                <version>1.2.70</version>
             </dependency>
 
             <dependency>
@@ -67,37 +67,6 @@
                 <artifactId>javax.servlet-api</artifactId>
                 <version>3.1.0</version>
             </dependency>
-
-            <!-- log4j2在web项目中的完整jar包 -->
-            <dependency>
-                <groupId>org.apache.logging.log4j</groupId>
-                <artifactId>log4j-web</artifactId>
-                <version>${log4j2.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.slf4j</groupId>
-                <artifactId>slf4j-api</artifactId>
-                <version>1.7.25</version>
-            </dependency>
-            <!--让用了 slf4j 的库能转发到 log4j2  -->
-            <dependency>
-                <groupId>org.apache.logging.log4j</groupId>
-                <artifactId>log4j-slf4j-impl</artifactId>
-                <version>2.10.0</version>
-            </dependency>
-            <!--commons-logging被jcl-over-slf4j代替-->
-            <dependency>
-                <groupId>org.slf4j</groupId>
-                <artifactId>jcl-over-slf4j</artifactId>
-                <version>1.7.25</version>
-            </dependency>
-            <!--让直接使用 log4j-1.2 的库转发到 log4j2 -->
-            <dependency>
-                <groupId>org.apache.logging.log4j</groupId>
-                <artifactId>log4j-1.2-api</artifactId>
-                <version>2.10.0</version>
-            </dependency>
-            <!--log end-->
 
             <!--AOP-->
             <dependency>
@@ -124,18 +93,6 @@
                 <version>1.1.10</version>
             </dependency>
 
-            <!-- mybatis核心包 -->
-            <dependency>
-                <groupId>org.mybatis</groupId>
-                <artifactId>mybatis</artifactId>
-                <version>3.4.4</version>
-            </dependency>
-            <!-- mybatis/spring包 -->
-            <dependency>
-                <groupId>org.mybatis</groupId>
-                <artifactId>mybatis-spring</artifactId>
-                <version>1.3.0</version>
-            </dependency>
             <dependency>
                 <groupId>mysql</groupId>
                 <artifactId>mysql-connector-java</artifactId>
