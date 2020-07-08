@@ -18,6 +18,7 @@
         <module>elasticsearch-7.6</module>
         <module>spark</module>
         <module>tools</module>
+        <module>cloud</module>
     </modules>
 
     <parent>
