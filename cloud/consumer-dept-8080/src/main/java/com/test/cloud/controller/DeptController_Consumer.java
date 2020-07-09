@@ -13,7 +13,7 @@ import java.util.List;
 public class DeptController_Consumer {
 
     // private String REST_URL_PREFIX = "http://127.0.0.1:8001";
-    private String REST_URL_PREFIX = "http://provider8001";
+    private String REST_URL_PREFIX = "http://provider-dept";
 
     @Resource
     private RestTemplate restTemplate;
