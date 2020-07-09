@@ -24,6 +24,7 @@
         <module>consumer-dept-8080</module>
         <module>provider-8002</module>
         <module>provider-8003</module>
+        <module>consumer-dept-feign-8080</module>
     </modules>
 
     <dependencyManagement>
