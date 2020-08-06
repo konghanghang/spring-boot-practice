@@ -22,6 +22,9 @@ public class NodeRegistryImpl implements INodeRegistry, Watcher {
     private static final String REGISTRY_PATH = "/registry";
     private static final String REGISTRY_MASTER_PATH = REGISTRY_PATH + "/master";
 
+    private String registerPath;
+    private String ipAndPort;
+
     public NodeRegistryImpl() {
 
     }
@@ -41,6 +44,8 @@ public class NodeRegistryImpl implements INodeRegistry, Watcher {
 
     @Override
     public void register(String registerPath, String nodeAddress) {
+        this.registerPath = registerPath;
+        this.ipAndPort = nodeAddress;
         try {
             if (zk.exists(REGISTRY_PATH, false) == null) {
                 zk.create(REGISTRY_PATH, null, ZooDefs.Ids.OPEN_ACL_UNSAFE, CreateMode.PERSISTENT);
@@ -77,7 +82,12 @@ public class NodeRegistryImpl implements INodeRegistry, Watcher {
         } else if (watchedEvent.getState() == Event.KeeperState.Expired) {
             logger.info("zk session expired, reconnect....");
             try {
+                // 掉线重连
                 zk = new ZooKeeper(zkServers, SESSION_TIMEOUT, this);
+                String servicePath = REGISTRY_PATH + "/" + registerPath;
+                String addressPath = servicePath + "/address-";
+                // 重新写入数据
+                zk.create(addressPath, ipAndPort.getBytes(), ZooDefs.Ids.OPEN_ACL_UNSAFE, CreateMode.EPHEMERAL_SEQUENTIAL);
                 logger.info("reconnected to zookeeper");
             } catch (Exception ex) {
                 logger.error("reconnect zookeeper client failure", ex);
