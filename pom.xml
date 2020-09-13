@@ -19,6 +19,7 @@
         <module>spark</module>
         <module>tools</module>
         <module>cloud</module>
+        <module>netty-study</module>
     </modules>
 
     <parent>
