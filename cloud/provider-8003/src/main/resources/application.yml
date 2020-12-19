@@ -14,7 +14,7 @@ spring:
     url: jdbc:mysql://127.0.0.1:3306/cloud03?useUnicode=true&characterEncoding=UTF-8&useSSL=false&allowPublicKeyRetrieval=true
     # 使用druid数据源
     type: com.alibaba.druid.pool.DruidDataSource
-    driver-class-name: com.mysql.jdbc.Driver
+    driver-class-name: com.mysql.cj.jdbc.Driver
     platform: mysql
     # 下面为连接池的补充设置，应用到上面所有数据源中
     # 初始化大小，最小，最大
