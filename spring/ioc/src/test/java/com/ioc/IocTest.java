@@ -9,6 +9,22 @@ import org.springframework.core.env.ConfigurableEnvironment;
 public class IocTest {
 
     @Test
+    public void testImport(){
+        final AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(MainConfig2.class);
+        final String[] beanDefinitionNames = context.getBeanDefinitionNames();
+        for (String name : beanDefinitionNames) {
+            System.out.println(name);
+        }
+        // 工厂bean调用getObject创建对象，
+        final Object colorFactoryBean = context.getBean("colorFactoryBean");
+        System.out.println("bean的类型：" + colorFactoryBean.getClass());
+
+        // 获取工厂bean本身
+        final Object colorFactory = context.getBean("&colorFactoryBean");
+        System.out.println("bean的类型：" + colorFactory.getClass());
+    }
+
+    @Test
     public void test03(){
         final AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(MainConfig2.class);
         final String[] beanDefinitionNames = context.getBeanDefinitionNames();
