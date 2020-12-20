@@ -4,8 +4,21 @@ import com.ioc.annotation.MainConfig;
 import com.ioc.annotation.MainConfig2;
 import org.junit.Test;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.core.env.ConfigurableEnvironment;
 
 public class IocTest {
+
+    @Test
+    public void test03(){
+        final AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(MainConfig2.class);
+        final String[] beanDefinitionNames = context.getBeanDefinitionNames();
+        final ConfigurableEnvironment environment = context.getEnvironment();
+        final String property = environment.getProperty("os.name");
+        System.out.println(property);
+        for (String name : beanDefinitionNames) {
+            System.out.println(name);
+        }
+    }
 
     @Test
     public void test02(){
