@@ -13,6 +13,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>ioc</module>
+        <module>aop</module>
     </modules>
 
     <properties>
