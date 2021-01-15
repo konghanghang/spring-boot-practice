@@ -21,6 +21,7 @@
         <module>cloud</module>
         <module>netty-study</module>
         <module>spring</module>
+        <module>data</module>
     </modules>
 
     <parent>
