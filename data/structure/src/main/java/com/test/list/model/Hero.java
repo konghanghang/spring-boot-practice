@@ -7,6 +7,7 @@ public class Hero{
     private String name;
     private String nickname;
     private Hero next;
+    private Hero pre;
 
     public Hero(int no, String name, String nickname) {
         this.no = no;
