@@ -85,4 +85,30 @@ class SingleLinkedTest {
         singleLinked.addByOrder(hero3);
         System.out.println(singleLinked.length());
     }
+
+    @Test
+    void getLastIndexNodeTest(){
+        singleLinked = new SingleLinked();
+        singleLinked.addByOrder(hero1);
+        singleLinked.addByOrder(hero2);
+        singleLinked.addByOrder(hero4);
+        singleLinked.addByOrder(hero3);
+        Hero lastIndexNode = singleLinked.getLastIndexNode(1);
+        System.out.println(lastIndexNode);
+        lastIndexNode = singleLinked.getLastIndexNode(3);
+        System.out.println(lastIndexNode);
+        lastIndexNode = singleLinked.getLastIndexNode(0);
+        System.out.println(lastIndexNode);
+    }
+
+    @Test
+    void reverseTest(){
+        singleLinked = new SingleLinked();
+        singleLinked.addByOrder(hero1);
+        singleLinked.addByOrder(hero2);
+        singleLinked.addByOrder(hero4);
+        singleLinked.addByOrder(hero3);
+        singleLinked.reverse();
+        singleLinked.list();
+    }
 }

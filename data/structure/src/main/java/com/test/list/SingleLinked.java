@@ -1,10 +1,12 @@
 package com.test.list;
 
 import com.test.list.model.Hero;
+import lombok.Getter;
 
 public class SingleLinked {
 
     // 创建头节点
+    @Getter
     private Hero head = new Hero(0, "", "");
 
     public void list(){
@@ -141,6 +143,47 @@ public class SingleLinked {
             temp = temp.getNext();
         }
         return length;
+    }
+
+    /**
+     * 获取倒数第几个节点
+     * @param index
+     * @return
+     */
+    public Hero getLastIndexNode(int index){
+        if (head.getNext() == null){
+            return null;
+        }
+        int length = length();
+        if (index <= 0 || index > length){
+            return null;
+        }
+        Hero cur = head.getNext();
+        for (int i = 0; i < length - index; i++) {
+            cur = cur.getNext();
+        }
+        return cur;
+    }
+
+    /**
+     * 反转链表
+     * @return
+     */
+    public SingleLinked reverse(){
+        if (head.getNext() == null || head.getNext().getNext() == null){
+            return this;
+        }
+        Hero reverseHead = new Hero(0, "", "");
+        Hero cur = head.getNext();// 当前节点
+        Hero next;
+        while (cur != null){
+            next = cur.getNext();
+            cur.setNext(reverseHead.getNext());
+            reverseHead.setNext(cur);
+            cur = next;
+        }
+        head.setNext(reverseHead.getNext());
+        return this;
     }
 
 }
