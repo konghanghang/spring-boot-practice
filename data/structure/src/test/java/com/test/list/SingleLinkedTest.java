@@ -44,12 +44,35 @@ class SingleLinkedTest {
     @Test
     void updateTest() {
         singleLinked = new SingleLinked();
-        singleLinked.add(hero1);
-        singleLinked.add(hero2);
-        singleLinked.add(hero3);
-        singleLinked.add(hero4);
+        singleLinked.addByOrder(hero1);
+        singleLinked.addByOrder(hero2);
+        singleLinked.addByOrder(hero3);
+        singleLinked.addByOrder(hero4);
         Hero newHero = new Hero(7, "aa", "aa1");
         singleLinked.update(newHero);
+        singleLinked.list();
+    }
+
+    @Test
+    void deleteTest(){
+        singleLinked = new SingleLinked();
+        singleLinked.addByOrder(hero1);
+        singleLinked.addByOrder(hero2);
+        singleLinked.addByOrder(hero4);
+        singleLinked.addByOrder(hero3);
+        singleLinked.list();
+        System.out.println("开始删除1:");
+        singleLinked.delete(1);
+        singleLinked.list();
+        System.out.println("开始删除4:");
+        singleLinked.delete(4);
+        singleLinked.list();
+        System.out.println("删除一个不存在的节点：7");
+        singleLinked.delete(7);
+        singleLinked.list();
+        System.out.println("删除完：");
+        singleLinked.delete(2);
+        singleLinked.delete(3);
         singleLinked.list();
     }
 }

@@ -70,6 +70,10 @@ public class SingleLinked {
         }
     }
 
+    /**
+     * 更新节点
+     * @param hero
+     */
     public void update(Hero hero){
         if (head.getNext() == null){
             System.out.println("表为空");
@@ -93,6 +97,35 @@ public class SingleLinked {
             temp.setNickname(hero.getNickname());
         } else {
             System.out.println("未找到节点");
+        }
+    }
+
+    /**
+     * 删除节点
+     * @param no
+     */
+    public void delete(int no){
+        if (head.getNext() == null){
+            System.out.println("链为空");
+            return;
+        }
+        Hero temp = head;
+        boolean flag = false;
+        while (true){
+            if (temp.getNext() == null){
+                break;
+            }
+            if (temp.getNext().getNo() == no){
+                // 找到了
+                flag = true;
+                break;
+            }
+            temp = temp.getNext();
+        }
+        if (flag){
+            temp.setNext(temp.getNext().getNext());
+        } else {
+            System.out.println("未找到");
         }
     }
 
