@@ -129,4 +129,18 @@ public class SingleLinked {
         }
     }
 
+    /**
+     * 返回链表节点个数，排除头节点
+     * @return
+     */
+    public int length(){
+        Hero temp = head;
+        int length = 0;
+        while (temp.getNext() != null){
+            length++;
+            temp = temp.getNext();
+        }
+        return length;
+    }
+
 }

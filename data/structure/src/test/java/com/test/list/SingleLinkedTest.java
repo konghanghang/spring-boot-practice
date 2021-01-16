@@ -75,4 +75,14 @@ class SingleLinkedTest {
         singleLinked.delete(3);
         singleLinked.list();
     }
+
+    @Test
+    void lengthTest(){
+        singleLinked = new SingleLinked();
+        singleLinked.addByOrder(hero1);
+        singleLinked.addByOrder(hero2);
+        singleLinked.addByOrder(hero4);
+        singleLinked.addByOrder(hero3);
+        System.out.println(singleLinked.length());
+    }
 }
