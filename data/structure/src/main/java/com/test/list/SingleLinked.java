@@ -45,6 +45,7 @@ public class SingleLinked {
      */
     public void addByOrder(Hero hero){
         Hero temp = head;
+        // 判断编号是否存在
         boolean flag = false;
         while (true){
             if (temp.getNext() == null){
@@ -66,6 +67,32 @@ public class SingleLinked {
         } else {
             hero.setNext(temp.getNext());
             temp.setNext(hero);
+        }
+    }
+
+    public void update(Hero hero){
+        if (head.getNext() == null){
+            System.out.println("表为空");
+            return;
+        }
+        Hero temp = head.getNext();
+        // 判断是否找到了对应编号的英雄
+        boolean flag = false;
+        while (true){
+            if (temp == null){
+                break;
+            }
+            if (temp.getNo() == hero.getNo()) {
+                flag = true;
+                break;
+            }
+            temp = temp.getNext();
+        }
+        if (flag){
+            temp.setName(hero.getName());
+            temp.setNickname(hero.getNickname());
+        } else {
+            System.out.println("未找到节点");
         }
     }
 
