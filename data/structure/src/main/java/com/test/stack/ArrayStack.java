@@ -71,4 +71,16 @@ public class ArrayStack {
             System.out.printf("stack[%d]=%d\n", i, stack[i]);
         }
     }
+
+    /**
+     * 返回栈顶元素，但不弹出
+     * @return
+     */
+    public int peek(){
+        if (isEmpty()){
+            System.out.println("peek->栈空");
+            return -1;
+        }
+        return stack[top];
+    }
 }
