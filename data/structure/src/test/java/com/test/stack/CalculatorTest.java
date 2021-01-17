@@ -8,7 +8,7 @@ class CalculatorTest {
 
     @Test
     void calculator() {
-        String expression = "7+3*6-2";
+        String expression = "70+10*6-2";
         Calculator calculator = new Calculator();
         int res = calculator.calculator(expression);
         System.out.printf("%s = %d", expression, res);

@@ -12,6 +12,7 @@ public class Calculator {
         int num2 = 0;
         int opera = 0;//运算符
         int index = 0;//用于扫描
+        String keepNum = "";
         ArrayStack numStack = new ArrayStack(10);
         ArrayStack operaStack = new ArrayStack(10);
         char ch = ' ';
@@ -44,8 +45,19 @@ public class Calculator {
                 // 抽取出来
                 operaStack.push(ch);
             } else {
-                // 如果是数字， 直接进入数字栈
-                numStack.push(ch - '0');
+                // 如果是数字， 直接进入数字栈，这样子的代码只能计算个位数，
+                // numStack.push(ch - '0');
+                // 为了兼容多位数，要判断当前ch的下一位是不是运算符，如果是运算符则push，不是则进行下一次循环
+                keepNum += ch;
+                // 如果是最后一位就不用再判断了
+                if (index == expression.length() - 1){
+                    numStack.push(Integer.valueOf(keepNum));
+                } else {
+                    if (this.isOpera(expression.substring(index + 1, index + 2).charAt(0))) {
+                        numStack.push(Integer.valueOf(keepNum));
+                        keepNum = "";
+                    }
+                }
             }
             index++;
             if (index == expression.length()){
