@@ -3,9 +3,11 @@ package com.test.sort;
 public class InsertSort {
 
     public void sort(int[] arr) {
+        int insertVal = 0;
+        int insertIndex = 0;
         for (int i = 1; i < arr.length; i++) {
-            int insertVal = arr[i];
-            int insertIndex = i - 1;
+            insertVal = arr[i];
+            insertIndex = i - 1;
             // insertIndex >= 0 保证找插入位置不越界
             // insertVal < arr[insertIndex] 表明待插入的数还没有找到正确位置
             while (insertIndex >= 0 && insertVal < arr[insertIndex]) {
