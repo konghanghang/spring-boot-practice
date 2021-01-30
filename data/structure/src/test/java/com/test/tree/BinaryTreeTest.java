@@ -4,8 +4,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 /**
  * @author yslao@outlook.com
  * @since 2021/1/29
@@ -69,5 +67,25 @@ class BinaryTreeTest {
         System.out.println();
         System.out.println("非递归:");
         BinaryTree.postOrderNoRecursion(binaryTreeNode);
+    }
+
+    @Test
+    @DisplayName("递归删除节点")
+    void deleteNodeRecursion() {
+        int deleteNo = 1;
+        if (binaryTreeNode.getData() == deleteNo){
+            binaryTreeNode = null;
+        } else {
+            BinaryTree.deleteNodeRecursion(binaryTreeNode, deleteNo);
+        }
+        BinaryTree.preOrderNoRecursion(binaryTreeNode);
+    }
+
+    @Test
+    @DisplayName("非递归删除节点")
+    void deleteNodeNoRecursion() {
+        int deleteNo = 4;
+        BinaryTree.deleteNodeNoRecursion(binaryTreeNode, deleteNo);
+        BinaryTree.preOrderNoRecursion(binaryTreeNode);
     }
 }
