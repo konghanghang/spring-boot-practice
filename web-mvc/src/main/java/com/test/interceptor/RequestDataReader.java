@@ -9,7 +9,6 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpRequest;
 import org.springframework.http.MediaType;
 
-import javax.validation.constraints.NotNull;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PushbackInputStream;
@@ -29,7 +28,7 @@ public class RequestDataReader {
         this.objectMapper = objectMapper;
     }
 
-    public boolean canRead(@NotNull HttpInputMessage message) {
+    public boolean canRead(HttpInputMessage message) {
         MediaType mediaType = message.getHeaders().getContentType();
         if (!canRead(mediaType)) {
             return false;
@@ -38,7 +37,7 @@ public class RequestDataReader {
         return canRead(httpMethod);
     }
 
-    protected boolean canRead(@NotNull MediaType mediaType) {
+    protected boolean canRead(MediaType mediaType) {
         if (mediaType == null){
             return true;
         }
@@ -51,7 +50,7 @@ public class RequestDataReader {
         return false;
     }
 
-    protected boolean canRead(@NotNull HttpMethod httpMethod) {
+    protected boolean canRead(HttpMethod httpMethod) {
         if (httpMethod == null){
             return true;
         }
@@ -85,7 +84,7 @@ public class RequestDataReader {
     }
 
     public List<MediaType> getSupportedMediaTypes() {
-        return Arrays.asList(MediaType.APPLICATION_JSON_UTF8, MediaType.APPLICATION_JSON);
+        return Arrays.asList(MediaType.APPLICATION_JSON);
     }
 
 }

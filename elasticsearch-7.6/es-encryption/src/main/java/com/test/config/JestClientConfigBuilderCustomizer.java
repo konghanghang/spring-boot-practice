@@ -5,8 +5,6 @@ import org.apache.http.conn.ssl.NoopHostnameVerifier;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
 import org.apache.http.ssl.SSLContextBuilder;
 import org.apache.http.ssl.SSLContexts;
-import org.springframework.boot.autoconfigure.elasticsearch.jest.HttpClientConfigBuilderCustomizer;
-import org.springframework.context.annotation.Configuration;
 
 import javax.annotation.Resource;
 import javax.net.ssl.HostnameVerifier;
@@ -17,13 +15,21 @@ import java.security.KeyStore;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
 
-@Configuration
-public class JestClientConfigBuilderCustomizer implements HttpClientConfigBuilderCustomizer {
+//import org.springframework.boot.autoconfigure.elasticsearch.jest.HttpClientConfigBuilderCustomizer;
+
+/**
+ * 由于springboot从2.0.2升级到2.3.5，导致HttpClientConfigBuilderCustomizer已经不存在，所以这里暂时先注释掉，
+ * 以后找时间解决
+ * todo HttpClientConfigBuilderCustomizer
+ */
+// @Configuration
+// public class JestClientConfigBuilderCustomizer implements HttpClientConfigBuilderCustomizer {
+public class JestClientConfigBuilderCustomizer {
 
     @Resource
     private ElasticsearchProperties elasticsearchProperties;
 
-    @Override
+    // @Override
     public void customize(HttpClientConfig.Builder builder) {
         if (elasticsearchProperties.getCertificatesType().equalsIgnoreCase("pem"))
             return;

@@ -2,7 +2,6 @@ package com.test.zk.api;
 
 import org.apache.zookeeper.*;
 import org.apache.zookeeper.data.Stat;
-import org.hibernate.validator.constraints.EAN;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;

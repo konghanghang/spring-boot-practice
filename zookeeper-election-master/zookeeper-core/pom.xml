@@ -13,12 +13,5 @@
     <artifactId>zookeeper-core</artifactId>
     <version>1.0.0</version>
 
-    <dependencies>
-        <dependency>
-            <groupId>org.apache.zookeeper</groupId>
-            <artifactId>zookeeper</artifactId>
-        </dependency>
-    </dependencies>
-
 
 </project>
