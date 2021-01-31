@@ -1,14 +1,13 @@
 package com.test.cloud;
 
-import com.test.cloud.config.MySelfRule;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
-import org.springframework.cloud.netflix.ribbon.RibbonClient;
 
 @SpringBootApplication
 @EnableEurekaClient
-@RibbonClient(name = "provider-dept", configuration = MySelfRule.class)
+// 如果不写@RibbonClient，mySelfRule放在scan可以扫描到的包下，则对所有服务生效
+// @RibbonClient(name = "provider-dept", configuration = MySelfRule.class)
 public class Consumer8080 {
 
     public static void main(String[] args) {
