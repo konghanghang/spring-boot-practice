@@ -17,7 +17,6 @@ public class BizService {
             @HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "3000")
     })
     public String bizTime(String id) {
-        int i = 10/0;
         int timeNum = 5;
         try {
             TimeUnit.SECONDS.sleep(timeNum);
