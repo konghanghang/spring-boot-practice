@@ -25,4 +25,9 @@ public class IndexController {
         return bizService.bizTime(id);
     }
 
+    @GetMapping("/circuit/{id}")
+    public String circuit(@PathVariable("id") Integer id) {
+        return bizService.bizCircuitBroker(id);
+    }
+
 }
