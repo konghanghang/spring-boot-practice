@@ -4,7 +4,10 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-@FeignClient(value = "provider-hystrix")
+/**
+ * 加上fallback，处理服务提供者宕机时返回对应异常
+ */
+@FeignClient(value = "provider-hystrix", fallback = BizNewService.class)
 public interface IBizService {
 
     @GetMapping("/hystrix/ok/{id}")
