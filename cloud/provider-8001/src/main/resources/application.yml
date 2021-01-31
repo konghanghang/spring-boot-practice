@@ -3,6 +3,7 @@ server:
     include-stacktrace: ALWAYS
   servlet:
     context-path: /
+  address: 0.0.0.0
 
 spring:
   application:
