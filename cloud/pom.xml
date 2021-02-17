@@ -30,6 +30,7 @@
         <module>nacos-provider-9001</module>
         <module>nacos-provider-9002</module>
         <module>nacos-consumer-8080</module>
+        <module>nacos-config-8080</module>
     </modules>
 
 </project>
