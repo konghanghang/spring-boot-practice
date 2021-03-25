@@ -11,7 +11,7 @@ public class MyProducer {
     public static void main(String[] args) {
         Properties properties = new Properties();
         // 指定kafka集群信息
-        properties.setProperty(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "127.0.0.1:9092");
+        properties.setProperty(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "172.20.63.61:9092");
         // 应答级别
         properties.setProperty(ProducerConfig.ACKS_CONFIG, "all");
         // 重试次数
