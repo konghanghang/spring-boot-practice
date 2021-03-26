@@ -6,6 +6,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
 import java.util.Objects;
 import java.util.Properties;
 
@@ -63,6 +64,19 @@ public class ProducerTest {
     @Test
     void customPartition() {
         properties.setProperty(ProducerConfig.PARTITIONER_CLASS_CONFIG, "com.test.kafka.partition.MyPartition");
+        kafkaProducer = new KafkaProducer<>(properties);
+        for (int i = 0; i < 10; i++) {
+            kafkaProducer.send(new ProducerRecord<String, String>("first", "msg -" + i));
+        }
+    }
+
+    @DisplayName("带拦截器的生产者")
+    @Test
+    void producerWithInterceptor() {
+        // 拦截器链,这两个类可以合成一个类
+        properties.put(ProducerConfig.INTERCEPTOR_CLASSES_CONFIG,
+                Arrays.asList("com.test.kafka.interceptor.TimeInterceptor",
+                        "com.test.kafka.interceptor.CounterInterceptor"));
         kafkaProducer = new KafkaProducer<>(properties);
         for (int i = 0; i < 10; i++) {
             kafkaProducer.send(new ProducerRecord<String, String>("first", "msg -" + i));
