@@ -22,8 +22,7 @@ public class ProducerTest {
     @BeforeEach
     void initProperties() {
         properties = new Properties();
-        Properties properties = new Properties();
-        properties.setProperty(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "172.20.63.61:9092");
+        properties.setProperty(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "127.0.0.1:9092");
         properties.setProperty(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringSerializer");
         properties.setProperty(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringSerializer");
     }
@@ -40,7 +39,7 @@ public class ProducerTest {
     void commonProducer() {
         kafkaProducer = new KafkaProducer<>(properties);
         for (int i = 0; i < 10; i++) {
-            kafkaProducer.send(new ProducerRecord<String, String>("first", "msg -" + i));
+            kafkaProducer.send(new ProducerRecord<String, String>("first", "test", "msg -" + i));
         }
     }
 
