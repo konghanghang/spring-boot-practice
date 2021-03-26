@@ -8,8 +8,7 @@ import org.springframework.context.ApplicationContext;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * 自定义feign调用处理
@@ -81,7 +80,17 @@ public class CustomizeInvocationHandler implements InvocationHandler {
         String configKey = Feign.configKey(target.type(), method);
         String[] parameterNames = invokeContent.getParameterNames(configKey);
         if (Objects.nonNull(args)) {
-
+            List<Object> newArgList = new ArrayList<>(args.length);
+            Map<String, Object> map = new HashMap<>();
+            newArgList.add(map);
+            for (int i = 0; i < args.length; i++) {
+                if (Objects.nonNull(parameterNames[i])) {
+                    map.put(parameterNames[i], args[i]);
+                } else {
+                    newArgList.add(args[i]);
+                }
+            }
+            args = newArgList.toArray();
         }
         return args;
     }
