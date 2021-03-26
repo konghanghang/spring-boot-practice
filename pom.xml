@@ -28,66 +28,17 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
-        <spring.cloud-version>Hoxton.SR9</spring.cloud-version>
-        <spring.alibaba.cloud-version>2.1.0.RELEASE</spring.alibaba.cloud-version>
-        <spring.boot-version>2.3.5.RELEASE</spring.boot-version>
-        <mybatis-plus-version>3.4.2</mybatis-plus-version>
-        <mysql-version>8.0.20</mysql-version>
-        <lombok-version>1.16.20</lombok-version>
-        <druid-version>1.1.17</druid-version>
-        <guava-version>30.0-jre</guava-version>
+        <mybatis-plus-version>3.4.0</mybatis-plus-version>
     </properties>
 
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-starter-parent</artifactId>
-                <version>${spring.boot-version}</version>
+                <groupId>com.iminling</groupId>
+                <artifactId>base-iminling-parent</artifactId>
+                <version>1.0.3-SNAPSHOT</version>
                 <type>pom</type>
                 <scope>import</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework.cloud</groupId>
-                <artifactId>spring-cloud-dependencies</artifactId>
-                <version>${spring.cloud-version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-            <dependency>
-                <groupId>com.alibaba.cloud</groupId>
-                <artifactId>spring-cloud-alibaba-dependencies</artifactId>
-                <version>${spring.alibaba.cloud-version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-            <dependency>
-                <groupId>com.baomidou</groupId>
-                <artifactId>mybatis-plus-boot-starter</artifactId>
-                <version>${mybatis-plus-version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>mysql</groupId>
-                <artifactId>mysql-connector-java</artifactId>
-                <version>${mysql-version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.projectlombok</groupId>
-                <artifactId>lombok</artifactId>
-                <version>${lombok-version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>com.alibaba</groupId>
-                <artifactId>druid-spring-boot-starter</artifactId>
-                <version>${druid-version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>com.google.guava</groupId>
-                <artifactId>guava</artifactId>
-                <version>${guava-version}</version>
             </dependency>
 
             <dependency>
@@ -102,24 +53,6 @@
                 <artifactId>fastjson</artifactId>
                 <version>1.2.70</version>
             </dependency>
-
-            <!--AOP-->
-            <dependency>
-                <groupId>org.aspectj</groupId>
-                <artifactId>aspectjweaver</artifactId>
-                <version>1.9.0</version>
-            </dependency>
-            <dependency>
-                <groupId>org.aspectj</groupId>
-                <artifactId>aspectjrt</artifactId>
-                <version>1.9.0</version>
-            </dependency>
-            <dependency>
-                <groupId>cglib</groupId>
-                <artifactId>cglib</artifactId>
-                <version>3.1</version>
-            </dependency>
-            <!--AOP end-->
 
         </dependencies>
     </dependencyManagement>

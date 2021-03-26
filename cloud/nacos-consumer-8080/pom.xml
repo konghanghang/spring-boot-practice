@@ -34,6 +34,10 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>com.iminling</groupId>
+            <artifactId>base-iminling-core</artifactId>
+        </dependency>
     </dependencies>
 
 </project>
