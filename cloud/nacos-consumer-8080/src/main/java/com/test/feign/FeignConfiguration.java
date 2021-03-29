@@ -1,7 +1,13 @@
 package com.test.feign;
 
+import feign.Contract;
 import feign.Feign;
+import feign.codec.Decoder;
+import feign.optionals.OptionalDecoder;
 import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.ObjectFactory;
+import org.springframework.boot.autoconfigure.http.HttpMessageConverters;
+import org.springframework.cloud.openfeign.support.ResponseEntityDecoder;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Bean;
@@ -26,15 +32,27 @@ public class FeignConfiguration implements ApplicationContextAware {
         this.applicationContext = applicationContext;
     }
 
+    @Bean
+    public Contract contract() {
+        return new CustomizeContract(invokeContent);
+    }
+
+    @Bean
+    public Decoder customizeDecoder(ObjectFactory<HttpMessageConverters> messageConverters) {
+        return new OptionalDecoder(new ResponseEntityDecoder(new CustomizeDecoder(messageConverters)));
+    }
+
     /**
      * Feign.Builder
      * @return
      */
     @Bean
     @Scope("prototype")
-    public Feign.Builder builder() {
+    public Feign.Builder builder(Contract contract, Decoder customizeDecoder) {
         Feign.Builder builder = Feign.builder();
         builder.requestInterceptor(new TokenInterceptor())
+                .contract(contract)
+                .decoder(customizeDecoder)
                 .invocationHandlerFactory(new CustomizeInvocationHandlerFactory(applicationContext, invokeContent));
         return builder;
     }
