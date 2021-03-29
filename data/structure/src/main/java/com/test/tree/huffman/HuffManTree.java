@@ -22,7 +22,7 @@ public class HuffManTree {
             System.out.println(list);
             Node leftNode = list.get(0);
             Node rightNode = list.get(1);
-            Node parent = new Node(leftNode.getValue() + rightNode.getValue());
+            Node parent = new Node(leftNode.getWeight() + rightNode.getWeight());
             parent.setLeft(leftNode);
             parent.setRight(rightNode);
             list.remove(leftNode);
