@@ -1,5 +1,6 @@
 package com.test.tree.sort;
 
+import com.test.tree.BinaryTree;
 import com.test.tree.BinaryTreeNode;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -21,7 +22,7 @@ class BinarySortTreeTest {
             binarySortTree.add(new BinaryTreeNode(i));
         }
 
-        binarySortTree.midOrder();
+        BinaryTree.midOrderNoRecursion(binarySortTree.getRoot());
     }
 
     /**
@@ -44,7 +45,7 @@ class BinarySortTreeTest {
             binarySortTree.add(new BinaryTreeNode(i));
         }
 
-        binarySortTree.midOrder();
+        BinaryTree.midOrderNoRecursion(binarySortTree.getRoot());
 
         int value = 1;
         BinaryTreeNode search = binarySortTree.search(value);
@@ -66,7 +67,7 @@ class BinarySortTreeTest {
             binarySortTree.add(new BinaryTreeNode(i));
         }
 
-        binarySortTree.midOrder();
+        BinaryTree.midOrderNoRecursion(binarySortTree.getRoot());
         System.out.println();
         // 删除叶子节点
         /*int value = 12;
@@ -79,20 +80,40 @@ class BinarySortTreeTest {
         binarySortTree.deleteNode(value);*/
         // 乱序删除
         binarySortTree.deleteNode(2);
-        binarySortTree.midOrder();
+        BinaryTree.midOrderNoRecursion(binarySortTree.getRoot());
         binarySortTree.deleteNode(5);
-        binarySortTree.midOrder();
+        BinaryTree.midOrderNoRecursion(binarySortTree.getRoot());
         binarySortTree.deleteNode(7);
-        binarySortTree.midOrder();
+        BinaryTree.midOrderNoRecursion(binarySortTree.getRoot());
         binarySortTree.deleteNode(12);
-        binarySortTree.midOrder();
+        BinaryTree.midOrderNoRecursion(binarySortTree.getRoot());
         binarySortTree.deleteNode(10);
-        binarySortTree.midOrder();
+        BinaryTree.midOrderNoRecursion(binarySortTree.getRoot());
         binarySortTree.deleteNode(3);
-        binarySortTree.midOrder();
+        BinaryTree.midOrderNoRecursion(binarySortTree.getRoot());
         binarySortTree.deleteNode(9);
-        binarySortTree.midOrder();
+        BinaryTree.midOrderNoRecursion(binarySortTree.getRoot());
         binarySortTree.deleteNode(1);
-        binarySortTree.midOrder();
+        BinaryTree.midOrderNoRecursion(binarySortTree.getRoot());
+    }
+
+    @Test
+    @DisplayName("平衡二叉树测试")
+    void AVLTree(){
+        BinarySortTree binarySortTree = new BinarySortTree();
+        // 左旋测试arr
+        // int[] arr = {4, 3, 6, 5, 7, 8};
+        // 右旋测试arr
+        int[] arr = {10, 12, 8, 9, 7, 6};
+        for (int i : arr) {
+            binarySortTree.add(new BinaryTreeNode(i));
+        }
+        BinaryTree.midOrderNoRecursion(binarySortTree.getRoot());
+        System.out.println("树的高度:" + BinaryTree.getHeightNoRecursion(binarySortTree.getRoot()));
+        // 把add方法中的平衡方法注视掉进行测试未平衡之前
+        // 恢复add方法中的平衡方法进行测试平衡之后
+        System.out.println("树的左子树高度:" + BinaryTree.getHeightNoRecursion(binarySortTree.getRoot().getLeft()));
+        System.out.println("树的右子树高度:" + BinaryTree.getHeightNoRecursion(binarySortTree.getRoot().getRight()));
+
     }
 }

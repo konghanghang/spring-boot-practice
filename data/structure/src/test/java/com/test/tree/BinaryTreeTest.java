@@ -88,4 +88,13 @@ class BinaryTreeTest {
         BinaryTree.deleteNodeNoRecursion(binaryTreeNode, deleteNo);
         BinaryTree.preOrderNoRecursion(binaryTreeNode);
     }
+
+    @Test
+    @DisplayName("获取树高度")
+    void getHeight(){
+        System.out.println("递归:");
+        System.out.println(BinaryTree.getHeightRecursion(binaryTreeNode));
+        System.out.println("非递归:");
+        System.out.println(BinaryTree.getHeightNoRecursion(binaryTreeNode));
+    }
 }

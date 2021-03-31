@@ -1,6 +1,8 @@
 package com.test.tree.sort;
 
+import com.test.tree.BinaryTree;
 import com.test.tree.BinaryTreeNode;
+import lombok.Data;
 
 import java.util.Objects;
 import java.util.Stack;
@@ -10,6 +12,7 @@ import java.util.Stack;
  * @author yslao@outlook.com
  * @since 2021/3/30
  */
+@Data
 public class BinarySortTree {
 
     private BinaryTreeNode root;
@@ -42,6 +45,28 @@ public class BinarySortTree {
                     }
                 }
             }
+        }
+        // 对当前二叉排序树进行平衡(平衡二叉树)
+        int leftHeight = BinaryTree.getHeightNoRecursion(root.getLeft());
+        int rightHeight = BinaryTree.getHeightNoRecursion(root.getRight());
+        // 右子树的高度大于左字数的高度 并且大于1 ,则进行平衡(左旋)
+        if (rightHeight - leftHeight > 1) {
+            // 右子树的左子树高度大于右子树的右子树的高度
+            if (root.getRight() != null
+                    && BinaryTree.getHeightNoRecursion(root.getRight().getLeft()) > BinaryTree.getHeightNoRecursion(root.getRight().getRight())) {
+                // 先对右子树进行右旋
+                rightRotate(root.getRight());
+            }
+            leftRotate(root);
+        } else if (leftHeight - rightHeight > 1) {
+            // 左子树的右子树高度大于左子树的左子树的高度
+            if (root.getLeft() != null
+                    && BinaryTree.getHeightNoRecursion(root.getLeft().getRight()) > BinaryTree.getHeightNoRecursion(root.getLeft().getLeft())) {
+                // 先对左子树进行左旋
+                leftRotate(root.getLeft());
+            }
+            // 再对根节点进行右旋
+            rightRotate(root);
         }
     }
 
@@ -195,26 +220,40 @@ public class BinarySortTree {
     }
 
     /**
-     * 中序遍历
+     * 进行左旋转
+     * 说明右子树的高度大于左子树的高度
      */
-    public void midOrder() {
-        if (root == null) {
-            System.out.println("树为空，无法遍历");
-            return;
-        }
-        BinaryTreeNode temp = root;
-        Stack<BinaryTreeNode> stack = new Stack<>();
-        while (temp != null || !stack.isEmpty()) {
-            if (temp != null) {
-                stack.push(temp);
-                temp = temp.getLeft();
-            } else {
-                BinaryTreeNode pop = stack.pop();
-                System.out.print(pop.getData() + "\t");
-                temp = pop.getRight();
-            }
-        }
-        System.out.println();
+    private void leftRotate(BinaryTreeNode node) {
+        // 以当前根节点的值创建新的节点
+        BinaryTreeNode newNode = new BinaryTreeNode(node.getData());
+        // 把新的结点的左子树设置成根节点的左子树
+        newNode.setLeft(node.getLeft());
+        // 把新的节点的右子树设置成根节点的右子树的左子树
+        newNode.setRight(node.getRight().getLeft());
+        // 把根节点的值替换成右子节点的值
+        node.setData(node.getRight().getData());
+        // 把根节点的右子树设置成根节点右子树的右子树
+        node.setRight(node.getRight().getRight());
+        // 把根节点的左子树设置成新的节点
+        node.setLeft(newNode);
     }
 
+    /**
+     * 进行右旋转
+     * 说明左子树的高度大于右子树的高度
+     */
+    private void rightRotate(BinaryTreeNode node) {
+        // 以当前根节点的值创建新的节点
+        BinaryTreeNode newNode = new BinaryTreeNode(node.getData());
+        // 把新的结点的右子树设置成根节点的右子树
+        newNode.setRight(node.getRight());
+        // 把新的节点的左子树设置成根节点的左子树的右子树
+        newNode.setLeft(node.getLeft().getRight());
+        // 把根节点的值替换成左子节点的值
+        node.setData(node.getLeft().getData());
+        // 把根节点的左子树设置成根节点左子树的左子树
+        node.setLeft(node.getLeft().getLeft());
+        // 把根节点的右子树设置成新的节点
+        node.setRight(newNode);
+    }
 }

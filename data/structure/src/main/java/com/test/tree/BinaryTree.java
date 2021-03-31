@@ -69,6 +69,7 @@ public class BinaryTree {
      */
     public static void midOrderNoRecursion(BinaryTreeNode treeNode) {
         if (treeNode == null) {
+            System.out.println("树为空，无法遍历");
             return;
         }
         Stack<BinaryTreeNode> stack = new Stack<>();
@@ -82,6 +83,7 @@ public class BinaryTree {
                 treeNode = pop.getRight();
             }
         }
+        System.out.println();
     }
 
     /**
@@ -184,6 +186,60 @@ public class BinaryTree {
                 }
             }
         }
+    }
+
+    /**
+     * 获取二叉树高度,递归方式
+     * @param treeNode
+     */
+    public static int getHeightRecursion(BinaryTreeNode treeNode) {
+        if (treeNode == null){
+            return 0;
+        }
+        int leftHeight = getHeightRecursion(treeNode.getLeft());
+        int rightHeight = getHeightRecursion(treeNode.getRight());
+        return Math.max(leftHeight, rightHeight) + 1;
+    }
+
+    /**
+     * 获取二叉树高度,非递归方式
+     * @param treeNode
+     * @return
+     */
+    public static int getHeightNoRecursion(BinaryTreeNode treeNode) {
+        int height = 0;
+        // 存放节点
+        Stack<BinaryTreeNode> nodes = new Stack<>();
+        // 存放与nodes中节点对应的是否需要移除标识0:正常 1:需要删除
+        Stack<Integer> flags = new Stack<>();
+        while (treeNode != null || !nodes.isEmpty()) {
+            // 这里向当于先序,找到一个节点子树的全部左节点,入栈
+            while (treeNode != null) {
+                nodes.push(treeNode);
+                flags.push(0);
+                treeNode = treeNode.getLeft();
+            }
+            if (flags.peek() == 1) {
+                // 走到这里,说明已经走到一个分支的最底,需要计算这条分支的高度
+                // nodes中的节点数就是当前分支的高度
+                height = Math.max(height, nodes.size());
+                // 最后从nodes栈中移除最上边一个节点
+                nodes.pop();
+                // 移除待删除标识
+                flags.pop();
+                // 将treeNode设置为null,读取nodes中的下一个节点
+                treeNode = null;
+            } else {
+                // 走到这里说明已经到了一个分支的最下一个节点,该节点是没有左子树的
+                treeNode = nodes.peek();
+                // 标识这个节点可以被删除
+                flags.pop();
+                flags.push(1);
+                // 找当前节点的右子树
+                treeNode = treeNode.getRight();
+            }
+        }
+        return height;
     }
 
 }
