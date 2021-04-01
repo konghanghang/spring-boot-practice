@@ -104,6 +104,8 @@ class BinarySortTreeTest {
         // 左旋测试arr
         // int[] arr = {4, 3, 6, 5, 7, 8};
         // 右旋测试arr
+        // int[] arr = {10, 12, 8, 9, 7, 6};
+        // 双旋
         int[] arr = {10, 12, 8, 9, 7, 6};
         for (int i : arr) {
             binarySortTree.add(new BinaryTreeNode(i));
