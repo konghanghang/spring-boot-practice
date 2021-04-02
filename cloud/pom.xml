@@ -28,8 +28,7 @@
         <module>consumer-feign-hystrix-8080</module>
         <module>gateway-9527</module>
         <module>nacos-provider</module>
-        <module>nacos-consumer-8080</module>
-        <module>nacos-config-8080</module>
+        <module>nacos-consumer</module>
     </modules>
 
     <dependencyManagement>
