@@ -3,7 +3,7 @@ package com.test.graph;
 import java.util.*;
 
 /**
- * 临接矩阵方式存储图
+ * 邻接矩阵方式存储图
  * @author yslao@outlook.com
  * @since 2021/3/31
  */
