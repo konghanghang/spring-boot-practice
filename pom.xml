@@ -22,6 +22,7 @@
         <module>netty-study</module>
         <module>spring</module>
         <module>data</module>
+        <module>JUC</module>
     </modules>
 
     <properties>
