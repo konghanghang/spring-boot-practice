@@ -2,7 +2,6 @@ package com.ioc.config;
 
 import com.ioc.bean.Car;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
 /**
@@ -30,11 +29,11 @@ import org.springframework.context.annotation.Configuration;
  *      postProcessAfterInitialization： 在初始化之后工作
  *
  */
-@ComponentScan("com.ioc.bean")
+// @ComponentScan("com.ioc.bean")
 @Configuration
 public class MainConfigOfLifeCycle {
 
-    @Bean(initMethod = "init", destroyMethod = "destroy")
+    @Bean(initMethod = "init", destroyMethod = "myDestroy")
     public Car car(){
         return new Car();
     }
