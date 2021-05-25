@@ -3,17 +3,20 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>spring-boot-demo</artifactId>
+        <artifactId>design-pattern</artifactId>
         <groupId>com.test</groupId>
         <version>1.0.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>design-pattern</artifactId>
+    <artifactId>structural-mode</artifactId>
     <packaging>pom</packaging>
     <modules>
-        <module>created-mode</module>
-        <module>structural-mode</module>
+        <module>adapter-pattern</module>
+        <module>bridge-pattern</module>
+        <module>decorator-pattern</module>
+        <module>facade-pattern</module>
+        <module>proxy-pattern</module>
     </modules>
 
     <properties>
