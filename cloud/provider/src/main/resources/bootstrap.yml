@@ -1,5 +1,6 @@
 eureka:
   client: #客户端注册进eureka服务列表内
+    enabled: false
     register-with-eureka: true
     fetch-registry: true
     healthcheck:
@@ -16,7 +17,7 @@ spring:
   cloud:
     nacos:
       discovery:
-        enable: false
+        enable: true
         server-addr: localhost:8848
       # config:
         # server-addr: localhost:8848

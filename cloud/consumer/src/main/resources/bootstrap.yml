@@ -1,5 +1,6 @@
 eureka:
   client:
+    enabled: false
     register-with-eureka: true
     fetch-registry: true
     healthcheck:
@@ -9,17 +10,18 @@ eureka:
   instance:
     instance-id: consumer   #自定义服务名称信息,显示再eureka网页的status中
     prefer-ip-address: true     #访问路径可以显示IP地址
+
 spring:
   application:
     name: consumer
   cloud:
     nacos:
       discovery:
-        enabled: false
+        enable: true
         server-addr: localhost:8848
-      #config:
-        #server-addr: localhost:8848
-        #file-extension: yml
+      # config:
+        # server-addr: localhost:8848
+        # file-extension: yml
         # 对应nacos中的namespace属性
         # namespace: public(或者是uuid)
         # 对应nacos中的group属性

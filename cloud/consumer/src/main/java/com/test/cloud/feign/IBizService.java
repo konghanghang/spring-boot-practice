@@ -8,9 +8,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 /**
  * 加上fallback，处理服务提供者宕机时返回对应异常
+ * nacos对client名称区分大小写，eureka不区分
  */
 @Component
-@FeignClient(value = "PROVIDER", fallback = BizNewService.class)
+@FeignClient(value = "provider", fallback = BizNewService.class)
 public interface IBizService {
 
     @GetMapping("/hystrix/ok/{id}")
