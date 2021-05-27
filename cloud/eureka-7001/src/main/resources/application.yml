@@ -4,7 +4,7 @@ server:
 eureka:
   instance:
     # 显示在DS Replicas中
-    hostname: eureka7001.com #eureka服务端的实例名称(这里使用了虚拟主机映射，修改hosts文件即可实现)
+    hostname: localhost #eureka服务端的实例名称(这里使用了虚拟主机映射，修改hosts文件即可实现)
   client:
     register-with-eureka: false     #false表示不向注册中心注册自己。
     fetch-registry: false     #false表示自己端就是注册中心，我的职责就是维护服务实例，并不需要去检索服务

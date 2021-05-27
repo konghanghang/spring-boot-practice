@@ -1,0 +1,31 @@
+server:
+  port: 8080
+
+# https://docs.spring.io/spring-cloud-openfeign/docs/2.2.5.RELEASE/reference/html/#spring-cloud-feign-overriding-defaults
+feign:
+  client:
+    config:
+      default:
+        # 超时时间
+        connect-timeout: 10000
+        read-timeout: 10000
+        logger-level: full
+  hystrix:
+    enabled: true
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 15000
+
+logging:
+  level:
+    com.test.cloud.feign.iBizService: debug
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'

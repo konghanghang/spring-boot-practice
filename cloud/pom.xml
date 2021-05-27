@@ -19,16 +19,9 @@
     <modules>
         <module>eureka-7001</module>
         <module>eureka-7002</module>
-        <module>api</module>
-        <module>provider-8001</module>
-        <module>consumer-dept-8080</module>
-        <module>provider-8002</module>
-        <module>provider-hystrix-8001</module>
-        <module>consumer-dept-feign-8080</module>
-        <module>consumer-feign-hystrix-8080</module>
         <module>gateway-9527</module>
-        <module>nacos-provider</module>
-        <module>nacos-consumer</module>
+        <module>provider</module>
+        <module>consumer</module>
     </modules>
 
     <dependencyManagement>

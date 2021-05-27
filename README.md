@@ -43,6 +43,13 @@ data为数据结构和算法模块,现在正在学习中.
 - [x] 自定义hash表
 - [x] 普通树和二叉树
 
+## design-pattern
+设计模式学习
+### created-mode
+创建型设计模式
+### structural-mode
+结构型设计模式
+
 ## elasticsearch
 
 es6.6版本的api实践
@@ -50,6 +57,9 @@ es6.6版本的api实践
 ## elasticsearch-7.6
 
 里边分为es7.6版本的加密介绍以及7.6版本正常的api实践,关于加密的详细介绍请看这篇文章介绍[Elasticsearch7.6开启xpack以及java代码配置客户端](https://segmentfault.com/a/1190000022102940).
+
+## JUC
+java并发相关工具的实践
 
 ## kafka
 
