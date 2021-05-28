@@ -4,6 +4,7 @@ import com.netflix.hystrix.contrib.javanica.annotation.DefaultProperties;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 import com.test.cloud.feign.IBizService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 
+@Slf4j
 @RefreshScope
 @RestController
 @RequestMapping("/consumer")
@@ -26,7 +28,9 @@ public class BizController {
 
     @GetMapping("/ok/{id}")
     public String ok(@PathVariable("id") String id) {
-        System.out.println("name:" + name);
+        // 通过MDC机制在日志中添加需要加入的东西 在logback的日志模式中用${traceId}取出即可
+        /*MDC.put("traceId", UUID.randomUUID().toString());*/
+        log.info("name:{}", name);
         return bizService.ok(id);
     }
 
