@@ -4,6 +4,8 @@ import com.netflix.hystrix.contrib.javanica.annotation.DefaultProperties;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 import com.test.cloud.feign.IBizService;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 
+@RefreshScope
 @RestController
 @RequestMapping("/consumer")
 @DefaultProperties(defaultFallback = "globalHandler")
@@ -18,9 +21,12 @@ public class BizController {
 
     @Resource
     private IBizService bizService;
+    @Value("${info.name}")
+    private String name;
 
     @GetMapping("/ok/{id}")
     public String ok(@PathVariable("id") String id) {
+        System.out.println("name:" + name);
         return bizService.ok(id);
     }
 

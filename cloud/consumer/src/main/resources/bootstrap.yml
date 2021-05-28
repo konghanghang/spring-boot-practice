@@ -17,12 +17,13 @@ spring:
   cloud:
     nacos:
       discovery:
-        enable: true
+        enabled: true
         server-addr: localhost:8848
-      # config:
-        # server-addr: localhost:8848
-        # file-extension: yml
+      config:
+        enabled: true
+        server-addr: localhost:8848
+        file-extension: yml
         # 对应nacos中的namespace属性
-        # namespace: public(或者是uuid)
+        namespace: dev
         # 对应nacos中的group属性
         # group: dev_group

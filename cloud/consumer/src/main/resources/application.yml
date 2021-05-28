@@ -1,6 +1,12 @@
 server:
   port: 8080
 
+spring:
+  profiles:
+    active: dev
+info:
+  name: zhangsan
+
 # https://docs.spring.io/spring-cloud-openfeign/docs/2.2.5.RELEASE/reference/html/#spring-cloud-feign-overriding-defaults
 feign:
   client:
