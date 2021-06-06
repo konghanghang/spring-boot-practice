@@ -63,4 +63,27 @@ public class QuickSort {
         }
     }
 
+    public void sort2(int[] arr, int left, int right) {
+        int l, r, mid;
+        if (left > right) {
+            return;
+        }
+        l = left;
+        r = right;
+        mid = arr[l]; // 用子表的第一个记录做基准
+        while (l < r) { // 从表的两端交替向中间扫描
+            while (l < r && arr[r] >= mid)
+                r--;
+            if (l < r)
+                arr[l++] = arr[r];// 用比基准小的记录替换低位记录
+            while (l < r && arr[l] < mid)
+                l++;
+            if (l < r) // 用比基准大的记录替换高位记录
+                arr[r--] = arr[l];
+        }
+        arr[l] = mid;// 将基准数值替换回 a[l]
+        sort2(arr, left, l - 1); // 对低子表进行递归排序
+        sort2(arr, l + 1, right); // 对高子表进行递归排序
+    }
+
 }

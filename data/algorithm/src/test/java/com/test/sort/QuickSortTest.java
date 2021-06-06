@@ -12,7 +12,8 @@ class QuickSortTest {
         System.out.println("排序前:");
         System.out.println(Arrays.toString(arr));
         QuickSort quickSort = new QuickSort();
-        quickSort.sort(arr, 0, arr.length - 1);
+        // quickSort.sort(arr, 0, arr.length - 1);
+        quickSort.sort2(arr, 0, arr.length - 1);
         System.out.println("排序后:");
         System.out.println(Arrays.toString(arr));
     }
