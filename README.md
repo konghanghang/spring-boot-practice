@@ -58,8 +58,8 @@ es6.6版本的api实践
 
 里边分为es7.6版本的加密介绍以及7.6版本正常的api实践,关于加密的详细介绍请看这篇文章介绍[Elasticsearch7.6开启xpack以及java代码配置客户端](https://segmentfault.com/a/1190000022102940).
 
-## JUC
-java并发相关工具的实践
+## JDK
+JDK相关工具使用：JUC、reflect
 
 ## kafka
 
