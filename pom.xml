@@ -43,7 +43,7 @@
         <commons-codec-version>1.15</commons-codec-version>
         <bcprov-jdk15on-version>1.64</bcprov-jdk15on-version>
         <java-jwt-version>3.3.0</java-jwt-version>
-        <commons-io-version>2.6</commons-io-version>
+        <commons-io-version>2.7</commons-io-version>
     </properties>
 
     <repositories>
