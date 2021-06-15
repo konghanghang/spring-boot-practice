@@ -60,7 +60,7 @@
         </dependency>
         <dependency>
             <groupId>com.iminling</groupId>
-            <artifactId>base-iminling-core</artifactId>
+            <artifactId>iminling-core</artifactId>
         </dependency>
     </dependencies>
 

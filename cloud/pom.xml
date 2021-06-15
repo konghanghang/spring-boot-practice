@@ -14,6 +14,8 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <spring.cloud-version>Hoxton.SR9</spring.cloud-version>
+        <spring.alibaba.cloud-version>2.1.0.RELEASE</spring.alibaba.cloud-version>
     </properties>
 
     <modules>
@@ -27,9 +29,18 @@
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>com.iminling</groupId>
-                <artifactId>base-iminling-core</artifactId>
-                <version>1.0.2-SNAPSHOT</version>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring.cloud-version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.alibaba.cloud</groupId>
+                <artifactId>spring-cloud-alibaba-dependencies</artifactId>
+                <version>${spring.alibaba.cloud-version}</version>
+                <type>pom</type>
+                <scope>import</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>
