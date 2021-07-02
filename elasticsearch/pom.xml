@@ -24,7 +24,7 @@
         <dependency>
             <groupId>org.elasticsearch</groupId>
             <artifactId>elasticsearch</artifactId>
-            <version>6.6.0</version>
+            <version>6.8.15</version>
         </dependency>
         <!--解决 Caused by: java.lang.NoSuchFieldError: Shared -->
         <dependency>
