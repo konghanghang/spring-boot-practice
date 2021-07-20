@@ -2,6 +2,7 @@ package com.test.cloud.config.feign;
 
 import feign.Contract;
 import feign.Feign;
+import feign.Logger.Level;
 import feign.codec.Decoder;
 import feign.optionals.OptionalDecoder;
 import org.springframework.beans.BeansException;
@@ -53,6 +54,7 @@ public class FeignConfiguration implements ApplicationContextAware {
         builder.requestInterceptor(new TokenInterceptor())
                 .contract(contract)
                 .decoder(customizeDecoder)
+                .logLevel(Level.FULL)
                 .invocationHandlerFactory(new CustomizeInvocationHandlerFactory(applicationContext, invokeContent));
         return builder;
     }

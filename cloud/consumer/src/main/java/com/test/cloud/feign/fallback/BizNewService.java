@@ -1,6 +1,7 @@
 package com.test.cloud.feign.fallback;
 
 import com.test.cloud.feign.IBizService;
+import com.test.cloud.model.User;
 import org.springframework.stereotype.Component;
 
 /**
@@ -21,5 +22,20 @@ public class BizNewService implements IBizService {
     @Override
     public String circuit(Integer id) {
         return "bizNewService fallback circuit, 出现异常";
+    }
+
+    @Override
+    public String param(String name, String age) {
+        return null;
+    }
+
+    @Override
+    public String body(User user) {
+        return null;
+    }
+
+    @Override
+    public String testParam(Integer id, String aaa) {
+        return null;
     }
 }

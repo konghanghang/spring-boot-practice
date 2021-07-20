@@ -1,5 +1,7 @@
 package com.test.cloud.config.feign;
 
+import org.springframework.stereotype.Component;
+
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -8,6 +10,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @author yslao@outlook.com
  * @since 2021/3/26
  */
+@Component
 public class InvokeContent {
 
     private Map<String, String[]> parameterNamesMap = new ConcurrentHashMap<>();

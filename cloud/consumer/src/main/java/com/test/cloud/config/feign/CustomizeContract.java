@@ -1,7 +1,22 @@
 package com.test.cloud.config.feign;
 
+import static feign.Util.checkState;
+import static feign.Util.emptyToNull;
+import static java.util.Optional.ofNullable;
+
+import com.iminling.core.annotation.EnableResolve;
 import com.test.cloud.config.utils.TypeUtils;
-import feign.*;
+import feign.Feign;
+import feign.MethodMetadata;
+import feign.Param.ToStringExpander;
+import feign.Util;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.lang.reflect.Type;
+import java.net.URI;
+import java.util.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cloud.openfeign.support.SpringMvcContract;
@@ -9,12 +24,10 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.annotation.AnnotatedElementUtils;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.*;
-
-import java.lang.annotation.Annotation;
-import java.lang.reflect.*;
-import java.net.URI;
-import java.util.*;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  * 自定义契约
@@ -52,25 +65,6 @@ public class CustomizeContract extends SpringMvcContract {
         }
     }
 
-    @Override
-    protected void processAnnotationOnClass(MethodMetadata data, Class<?> clz) {
-        if (clz.getInterfaces().length == 0) {
-            RequestMapping classAnnotation = AnnotatedElementUtils.findMergedAnnotation(clz,
-                    RequestMapping.class);
-            if (classAnnotation != null) {
-                // Prepend path from class annotation if specified
-                if (classAnnotation.value().length > 0) {
-                    String pathValue = Util.emptyToNull(classAnnotation.value()[0]);
-                    pathValue = resolve(pathValue);
-                    if (!pathValue.startsWith("/")) {
-                        pathValue = "/" + pathValue;
-                    }
-                    data.template().uri(pathValue);
-                }
-            }
-        }
-    }
-
     /**
      * 参考org.springframework.cloud.openfeign.support.SpringMvcContract的实现
      * @param targetType
@@ -79,43 +73,47 @@ public class CustomizeContract extends SpringMvcContract {
      */
     @Override
     public MethodMetadata parseAndValidateMetadata(Class<?> targetType, Method method) {
+        String httpMethodName = CustomizeFeignUtils.getHttpMethodName(method);
+        EnableResolve enableResolve = CustomizeFeignUtils.findEnableResole(targetType, method);
         String configKey = Feign.configKey(targetType, method);
         processedMethods.put(configKey, method);
+        // 如果是get请求直接调用springMvcContract进行处理
+        if ("GET".equals(httpMethodName) || Objects.isNull(enableResolve)) {
+            return super.parseAndValidateMetadata(targetType, method);
+        }
         MethodMetadata methodMetadata = createMethodMetadata();
         Type returnType = TypeUtils.resolve(targetType, targetType, method.getGenericReturnType());
         methodMetadata.returnType(returnType);
         methodMetadata.configKey(configKey);
-
         if (targetType.getInterfaces().length == 1) {
-            this.processAnnotationOnClass(methodMetadata, targetType.getInterfaces()[0]);
+            super.processAnnotationOnClass(methodMetadata, targetType.getInterfaces()[0]);
         }
-        this.processAnnotationOnClass(methodMetadata, targetType);
+        super.processAnnotationOnClass(methodMetadata, targetType);
         for (final Annotation methodAnnotation : method.getAnnotations()) {
-            processAnnotationOnMethod(methodMetadata, methodAnnotation, method);
+            super.processAnnotationOnMethod(methodMetadata, methodAnnotation, method);
         }
-        setDefaultRequestMethod(methodMetadata, method);
-        Map<Integer, Integer> indexMap = processParameterIndex(methodMetadata, method);
-        exchangeIndex(methodMetadata, method, indexMap);
+        processParameterIndex(methodMetadata, method);
         String[] parameterNames = processParameterNames(method);
         invokeContent.setParametersName(configKey, parameterNames);
 
-        RequestMapping classAnnotation = AnnotatedElementUtils.findMergedAnnotation(targetType,
-                RequestMapping.class);
-        if (classAnnotation != null) {
+        // ==========================下边的从SpringMvcContract搬运==========================
+        RequestMapping requestMapping = AnnotatedElementUtils.findMergedAnnotation(targetType, RequestMapping.class);
+        if (requestMapping != null) {
             // produces - use from class annotation only if method has not specified this
             if (!methodMetadata.template().headers().containsKey(ACCEPT)) {
-                parseProduces(methodMetadata, method, classAnnotation);
+                parseProduces(methodMetadata, method, requestMapping);
             }
 
             // consumes -- use from class annotation only if method has not specified this
             if (!methodMetadata.template().headers().containsKey(CONTENT_TYPE)) {
-                parseConsumes(methodMetadata, method, classAnnotation);
+                parseConsumes(methodMetadata, method, requestMapping);
             }
 
             // headers -- class annotation is inherited to methods, always write these if
             // present
-            parseHeaders(methodMetadata, method, classAnnotation);
+            parseHeaders(methodMetadata, method, requestMapping);
         }
+        // ==========================从SpringMvcContract搬运结束==========================
         return methodMetadata;
     }
 
@@ -149,15 +147,6 @@ public class CustomizeContract extends SpringMvcContract {
         return value;
     }
 
-    private void setDefaultRequestMethod(MethodMetadata methodMetadata, Method method) {
-        RequestMapping requestMapping = AnnotatedElementUtils.findMergedAnnotation(method, RequestMapping.class);
-        assert requestMapping != null;
-        RequestMethod[] requestMethods = requestMapping.method();
-        if (requestMethods.length == 0) {
-            methodMetadata.template().method(Request.HttpMethod.POST);
-        }
-    }
-
     private Map<Integer, Integer> processParameterIndex(MethodMetadata methodMetadata, Method method) {
         Map<Integer, Integer> indexMap = new HashMap<>();
 
@@ -169,67 +158,51 @@ public class CustomizeContract extends SpringMvcContract {
 
         for (int i = 0; i < count; i++) {
             boolean isUriParameter = parameterTypes[i] == URI.class;
-            if (Objects.nonNull(parameterTypes[i])){
-                List<Annotation> annotations = new ArrayList<>(parameterAnnotations.length);
-                boolean hasHttpAnnotation = false;
-                for (Annotation parameterAnnotation : parameterAnnotations[i]) {
-                    if (parameterAnnotation instanceof RequestHeader || parameterAnnotation instanceof PathVariable){
-                        annotations.add(parameterAnnotation);
-                        hasHttpAnnotation = true;
-                    } else if (parameterAnnotation instanceof RequestParam){
-                        hasHttpAnnotation = true;
-                    }
-                }
-                Util.checkState(hasHttpAnnotation || isUriParameter,
-                        "Method %s must have @RequestParam annotation on parameter %s",
-                        method.getName(), i);
-                if (!annotations.isEmpty()) {
-                    indexMap.put(i, paramIndex);
-                    processAnnotationsOnParameter(methodMetadata, annotations.toArray(new Annotation[0]), i);
-                    paramIndex++;
-                }
-            }
             if (isUriParameter) {
                 methodMetadata.urlIndex(paramIndex);
                 paramIndex++;
+                continue;
+            }
+            for (Annotation parameterAnnotation : parameterAnnotations[i]) {
+                Class<?> parameterType = parameterTypes[i];
+                // RequestHeader暂时先写在这里，实际应该用不上
+                if (parameterAnnotation instanceof RequestHeader) {
+                    if (Map.class.isAssignableFrom(parameterType)) {
+                        checkState(methodMetadata.headerMapIndex() == null,
+                            "Header map can only be present once.");
+                        methodMetadata.headerMapIndex(paramIndex);
+                    } else {
+                        String name = ((RequestHeader) parameterAnnotation).value();
+                        Collection<String> params = ofNullable(methodMetadata.template().headers().get(name))
+                            .map(ArrayList::new)
+                            .orElse(new ArrayList<>());
+                        params.add(String.format("{%s}", name));
+                        methodMetadata.template().header(name, params);
+                    }
+                    methodMetadata.ignoreParamater(paramIndex);
+                } else if (parameterAnnotation instanceof PathVariable) {
+                    methodMetadata.ignoreParamater(paramIndex);
+                    String name = ((PathVariable) parameterAnnotation).value();
+                    super.nameParam(methodMetadata, name, paramIndex);
+                    methodMetadata.indexToExpander().put(paramIndex, new ToStringExpander());
+                } else if (parameterAnnotation instanceof RequestParam) {
+                    Class<RequestParam> ANNOTATION = RequestParam.class;
+                    RequestParam requestParam = ANNOTATION.cast(parameterAnnotation);
+                    String name = requestParam.value();
+                    checkState(emptyToNull(name) != null,
+                        "RequestParam.value() was empty on parameter %s", i);
+                    methodMetadata.ignoreParamater(paramIndex);
+                } else {
+                    Util.checkState(true,
+                        "Method %s must have @RequestParam annotation on parameter %s",
+                        method.getName(), i);
+                }
+                paramIndex++;
             }
         }
-        // todo
         methodMetadata.bodyIndex(0);
-        methodMetadata.bodyType();
+        methodMetadata.bodyType(TypeUtils.resolve(Map.class, Map.class, Map.class));
         return indexMap;
-    }
-
-    private void exchangeIndex(MethodMetadata methodMetadata, Method method, Map<Integer, Integer> indexMap) {
-        Map<Integer, Collection<String>> index2Name = new LinkedHashMap<>();
-        for (Map.Entry<Integer, Collection<String>> entry : methodMetadata.indexToName().entrySet()) {
-            index2Name.put(indexMap.get(entry.getKey()), entry.getValue());
-        }
-        methodMetadata.indexToName().clear();
-        for (Map.Entry<Integer, Collection<String>> entry : index2Name.entrySet()) {
-            methodMetadata.indexToName().put(entry.getKey(), entry.getValue());
-        }
-        Map<Integer, Param.Expander> index2Expander = new LinkedHashMap<>();
-        for (Map.Entry<Integer, Param.Expander> entry : methodMetadata.indexToExpander().entrySet()) {
-            index2Expander.put(indexMap.get(entry.getKey()), entry.getValue());
-        }
-        methodMetadata.indexToExpander(index2Expander);
-        Class<?>[] parameterTypes = method.getParameterTypes();
-        Type[] genericParameterTypes = method.getGenericParameterTypes();
-        if (Objects.nonNull(methodMetadata.headerMapIndex())) {
-            checkMapString("HeaderMap", parameterTypes[methodMetadata.headerMapIndex()],
-                    genericParameterTypes[methodMetadata.headerMapIndex()]);
-        }
-        methodMetadata.headerMapIndex(indexMap.get(methodMetadata.headerMapIndex()));
-    }
-
-    private void checkMapString(String name, Class<?> type, Type genericType) {
-        Util.checkState(Map.class.isAssignableFrom(type),
-                "%s parameter must be a Map: %s", name, type);
-        Type[] actualTypeArguments = ((ParameterizedType) genericType).getActualTypeArguments();
-        Class<?> keyClass = (Class<?>) actualTypeArguments[0];
-        Util.checkState(String.class.equals(keyClass),
-                "%s key must be a String: %s", name, keyClass.getSimpleName());
     }
 
     private String[] processParameterNames(Method method) {
@@ -249,6 +222,13 @@ public class CustomizeContract extends SpringMvcContract {
             }
         }
         return parameterNames;
+    }
+
+    protected void nameParam(MethodMetadata data, String name, int i) {
+        final Collection<String> names =
+            data.indexToName().containsKey(i) ? data.indexToName().get(i) : new ArrayList<String>();
+        names.add(name);
+        data.indexToName().put(i, names);
     }
 
     private void parseProduces(MethodMetadata md, Method method,

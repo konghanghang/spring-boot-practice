@@ -17,7 +17,7 @@ feign:
         read-timeout: 10000
         logger-level: full
   hystrix:
-    enabled: true
+    enabled: false
 hystrix:
   command:
     default:

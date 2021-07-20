@@ -1,14 +1,14 @@
 package com.test.cloud.config.feign;
 
+import com.iminling.core.annotation.EnableResolve;
 import feign.Feign;
 import feign.InvocationHandlerFactory;
 import feign.Target;
-import org.springframework.context.ApplicationContext;
-
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.util.*;
+import org.springframework.context.ApplicationContext;
 
 /**
  * 自定义feign调用处理
@@ -46,8 +46,12 @@ public class CustomizeInvocationHandler implements InvocationHandler {
         } else if ("toString".equals(method.getName())) {
             return toString();
         }
-        // 改变参数
-        args = resolveArgs(method, args);
+        String httpMethodName = CustomizeFeignUtils.getHttpMethodName(method);
+        EnableResolve enableResolve = CustomizeFeignUtils.findEnableResole(method.getDeclaringClass(), method);
+        // 如果是get请求直接调用springMvcContract进行处理
+        if (!"GET".equals(httpMethodName) && !Objects.isNull(enableResolve)) {
+            args = resolveArgs(method, args);
+        }
         return dispatch.get(method).invoke(args);
     }
 

@@ -8,14 +8,16 @@
 <!-- debug 当此属性设置为true时，将打印出logback内部日志信息，实时查看logback运行状态。默认值为false。 -->
 <configuration scan="true" scanPeriod="60 seconds" debug="false">
 
-	<springProperty name="APP_NAME" scope="context" source="spring.application.name" defaultValue="web"/>
+	<!--<springProperty name="APP_NAME" scope="context" source="spring.application.name" defaultValue="web"/>-->
 	<springProperty name="ServerIP" scope="context" source="spring.cloud.client.ip-address" defaultValue="0.0.0.0"/>
 	<springProperty name="ServerPort" scope="context" source="server.port" defaultValue="0000"/>
 	<!--<springProperty name="LOG_MAX_FILESIZE" scope="context" source="logback.filesize" defaultValue="50MB"/>
 	<springProperty name="LOG_FILE_MAX_DAY" scope="context" source="logback.filemaxday" defaultValue="7"/>-->
 	<!--<springProperty name="LOG_FILE" scope="context" source="logging.file" defaultValue="../logs/application/${APP_NAME}"/>-->
-	<springProperty name="LOG_DIR" scope="context" source="logging.file" defaultValue="logs"/>
+	<!--<springProperty name="LOG_DIR" scope="context" source="logging.file" defaultValue="logs"/>-->
 
+	<property name="APP_NAME" value="provider"/>
+	<property name="LOG_DIR" value="logs"/>
 	<!-- 彩色日志格式 -->
 	<property name="MY_LOG_PATTERN" value="[${APP_NAME}:${ServerIP}:${ServerPort}] %d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %highlight(%-5level) ${PID} [%yellow(%X{X-B3-TraceId}),%green(%X{X-B3-SpanId}),%blue(%X{X-B3-ParentSpanId})] %cyan(%logger):%highlight(%-4L) - %m%n" />
 	<property name="MY_LOG_PATTERN_NO_COLOR" value="[${APP_NAME}:${ServerIP}:${ServerPort}] %d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %level ${PID} [%X{traceId}] %logger:%-4L - %m%n" />

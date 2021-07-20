@@ -1,12 +1,12 @@
 eureka:
   client: #客户端注册进eureka服务列表内
-    enabled: false
+    enabled: true
     register-with-eureka: true
     fetch-registry: true
     healthcheck:
       enabled: true
     service-url:
-      defaultZone: http://127.0.0.1:7001/eureka/,http://127.0.0.1:7002/eureka/
+      defaultZone: http://127.0.0.1:7001/eureka/
   instance:
     instance-id: provider   #自定义服务名称信息,显示再eureka网页的status中
     prefer-ip-address: true     #访问路径可以显示IP地址
@@ -17,7 +17,7 @@ spring:
   cloud:
     nacos:
       discovery:
-        enabled: true
+        enabled: false
         server-addr: localhost:8848
       config:
         enabled: false
