@@ -39,7 +39,7 @@
         <druid-version>1.2.3</druid-version>
         <guava-version>30.0-jre</guava-version>
         <commons-lang3-version>3.11</commons-lang3-version>
-        <commons-compress-version>1.20</commons-compress-version>
+        <commons-compress-version>1.21</commons-compress-version>
         <commons-codec-version>1.15</commons-codec-version>
         <bcprov-jdk15on-version>1.64</bcprov-jdk15on-version>
         <java-jwt-version>3.3.0</java-jwt-version>
