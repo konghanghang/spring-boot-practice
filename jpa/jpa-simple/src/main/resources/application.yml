@@ -1,0 +1,22 @@
+server:
+  port: 6890
+
+#数据库的指定及连接根据自己的改
+spring:
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/jpa?serverTimezone=UTC&characterEncoding=UTF-8&useSSL=false
+    username: root
+    password: konghang123
+    driver-class-name: com.mysql.jdbc.Driver
+    type: com.zaxxer.hikari.HikariDataSource
+  #jpa的配置
+  jpa:
+    database: MYSQL
+    hibernate:
+      ddl-auto: update
+      naming:
+        strategy: org.hibernate.cfg.ImprovedNamingStrategy
+    properties:
+      hibernate:
+        dialect: com.test.jpa.config.MySQL5DialectUtf8mb4
+    show-sql: true

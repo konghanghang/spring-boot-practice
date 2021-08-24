@@ -24,6 +24,7 @@
         <module>data</module>
         <module>JDK</module>
         <module>design-pattern</module>
+      <module>jpa</module>
     </modules>
 
     <properties>
