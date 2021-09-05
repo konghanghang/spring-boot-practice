@@ -20,7 +20,6 @@
 
     <modules>
         <module>eureka-7001</module>
-        <module>eureka-7002</module>
         <module>gateway-9527</module>
         <module>provider</module>
         <module>consumer</module>
