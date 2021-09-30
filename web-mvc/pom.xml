@@ -47,6 +47,10 @@
             <artifactId>java-jwt</artifactId>
             <version>3.3.0</version>
         </dependency>
+        <dependency>
+            <groupId>com.iminling</groupId>
+            <artifactId>iminling-core</artifactId>
+        </dependency>
     </dependencies>
 
     <build>

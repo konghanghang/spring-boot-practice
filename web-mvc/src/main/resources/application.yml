@@ -4,3 +4,18 @@ server:
 spring:
   mvc:
     throw-exception-if-no-handler-found: true
+
+knife4j:
+  info:
+    description: web-mvc接口文档
+    serviceUrl: www.iminling.com
+    contactName: 孔航
+    contactUrl: www.iminling.com
+    contactEmail: yslao@outlook.com
+    groupName: web-mvc-v1.0
+    basePackage: com.test.controller
+
+application:
+  log:
+    argument: true
+    result: true

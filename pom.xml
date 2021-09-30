@@ -31,7 +31,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
-        <base.core-version>2.2.0-SNAPSHOT</base.core-version>
+        <base.core-version>2.2.2-SNAPSHOT</base.core-version>
         <spring.boot-version>2.3.5.RELEASE</spring.boot-version>
         <spring-version>5.2.10.RELEASE</spring-version>
         <mybatis-plus-version>3.4.0</mybatis-plus-version>
