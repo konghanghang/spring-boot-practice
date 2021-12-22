@@ -2,8 +2,8 @@ package com.test.config.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.iminling.common.json.JsonUtil;
+import com.iminling.core.config.value.ResultModel;
 import com.iminling.core.util.ThreadContext;
-import com.iminling.model.common.ResultModel;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -75,7 +75,7 @@ public class RestTemplateLoggingInterceptor implements ClientHttpRequestIntercep
         @Override
         public InputStream getBody() throws IOException {
             if (inputStream == null) {
-                if (Boolean.valueOf(Optional.ofNullable(ThreadContext.getAttribute("resultModel")).map(Object::toString).orElse("true"))) {
+                if (Boolean.valueOf(Optional.ofNullable(ThreadContext.Companion.getAttribute("resultModel")).map(Object::toString).orElse("true"))) {
                     inputStream = response.getBody();
                     return inputStream;
                 }
