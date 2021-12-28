@@ -22,7 +22,8 @@
         </dependency>
         <dependency>
             <groupId>com.alibaba</groupId>
-            <artifactId>druid-spring-boot-starter</artifactId>
+            <artifactId>druid</artifactId>
+            <version>1.2.3</version>
         </dependency>
         <dependency>
             <groupId>com.google.guava</groupId>
@@ -54,7 +55,56 @@
             <artifactId>hutool-core</artifactId>
             <version>5.7.14</version>
         </dependency>
+        <dependency>
+            <groupId>com.jcraft</groupId>
+            <artifactId>jsch</artifactId>
+            <version>0.1.54</version>
+        </dependency>
     </dependencies>
+
+    <build>
+        <finalName>tools-app</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>${spring.boot-version}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <!--https://blog.csdn.net/mytt_10566/article/details/100116670-->
+            <plugin>
+                <groupId>pl.project13.maven</groupId>
+                <artifactId>git-commit-id-plugin</artifactId>
+                <version>4.0.0</version>
+                <executions>
+                    <execution>
+                        <id>get-the-git-infos</id>
+                        <!-- 默认绑定阶段initialize -->
+                        <phase>initialize</phase>
+                        <goals>
+                            <!-- 目标：revision -->
+                            <goal>revision</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <!--<dotGitDirectory>${project.basedir}/.git</dotGitDirectory>-->
+                    <!--<generateGitPropertiesFilename>${project.build.outputDirectory}/git.json</generateGitPropertiesFilename>-->
+                    <!--<format>json</format>-->
+                    <generateGitPropertiesFile>true</generateGitPropertiesFile>
+                    <dateFormat>yyyy-MM-dd HH:mm:ss</dateFormat>
+                    <useNativeGit>true</useNativeGit>
+                    <offline>true</offline>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
 
 </project>
