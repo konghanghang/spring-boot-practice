@@ -5,13 +5,14 @@ import java.util.concurrent.TimeUnit;
 import okhttp3.ConnectionPool;
 import okhttp3.OkHttpClient;
 import okhttp3.OkHttpClient.Builder;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.client.OkHttp3ClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
 
-@Configuration
+/**
+ * 已在核心框架中定义
+ */
+//@Configuration
 public class RestTemplateConfiguration {
 
     /**
@@ -22,7 +23,7 @@ public class RestTemplateConfiguration {
      * ClientHttpRequestInterceptor 请求拦截器
      * @return
      */
-    @Bean
+    //@Bean
     public RestTemplate restTemplate() {
         OkHttpClient okHttpClient = new Builder()
             .readTimeout(10000, TimeUnit.MILLISECONDS)

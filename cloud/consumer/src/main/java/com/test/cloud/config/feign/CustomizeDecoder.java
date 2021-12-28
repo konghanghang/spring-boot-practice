@@ -1,16 +1,15 @@
 package com.test.cloud.config.feign;
 
 import com.iminling.common.json.JsonUtil;
-import com.iminling.model.common.ResultModel;
-import com.iminling.model.exception.BizException;
+import com.iminling.core.config.value.ResultModel;
+import com.iminling.core.exception.BizException;
 import feign.FeignException;
 import feign.Response;
+import java.io.IOException;
+import java.lang.reflect.Type;
 import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.boot.autoconfigure.http.HttpMessageConverters;
 import org.springframework.cloud.openfeign.support.SpringDecoder;
-
-import java.io.IOException;
-import java.lang.reflect.Type;
 
 /**
  * 自定义解码器
