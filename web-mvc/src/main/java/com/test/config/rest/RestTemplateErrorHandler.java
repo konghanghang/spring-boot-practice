@@ -1,11 +1,12 @@
 package com.test.config.rest;
 
-import java.io.IOException;
-import java.nio.charset.Charset;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.web.client.DefaultResponseErrorHandler;
+
+import java.io.IOException;
+import java.nio.charset.Charset;
 
 public class RestTemplateErrorHandler extends DefaultResponseErrorHandler {
 
@@ -24,8 +25,7 @@ public class RestTemplateErrorHandler extends DefaultResponseErrorHandler {
     protected Charset getCharset(ClientHttpResponse response) {
         HttpHeaders headers = response.getHeaders();
         MediaType contentType = headers.getContentType();
-        return (contentType != null && contentType.getCharset() != null) ? contentType.getCharset() : Charset.forName(
-            "UTF-8");
+        return (contentType != null && contentType.getCharset() != null) ? contentType.getCharset() : Charset.defaultCharset();
     }
 
 }
