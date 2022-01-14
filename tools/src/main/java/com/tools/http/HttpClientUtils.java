@@ -1,6 +1,18 @@
 package com.tools.http;
 
 import cn.hutool.core.util.StrUtil;
+import java.io.*;
+import java.net.URLEncoder;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
+import java.security.*;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import javax.net.ssl.SSLContext;
 import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
@@ -11,6 +23,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.conn.ssl.DefaultHostnameVerifier;
 import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
+import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -24,15 +37,6 @@ import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
-
-import javax.net.ssl.SSLContext;
-import java.io.*;
-import java.net.URLEncoder;
-import java.nio.charset.Charset;
-import java.security.*;
-import java.security.cert.CertificateException;
-import java.security.cert.X509Certificate;
-import java.util.*;
 
 /**
  * see -http://blog.csdn.net/wangpeng047/article/details/19624529
@@ -417,21 +421,25 @@ public class HttpClientUtils {
      * MultipartEntityBuilder 默认contentType为 multipart_form_data
      * @param url 上传地址
      * @param content 要上传内容
-     * @param token token
+     * @param params post参数
      * @return body
      */
-    public static String postBytes(String url, byte[] content, String token) {
+    public static String postBytes(String url, byte[] content, Map<String, String> params) {
         try(CloseableHttpClient httpclient = HttpClients.createDefault()) {
             HttpPost httppost = new HttpPost(url);
             //FileBody bin = new FileBody(file);
             //StringBody comment = new StringBody("A binary file of some kind", ContentType.TEXT_PLAIN);
             MultipartEntityBuilder builder = MultipartEntityBuilder.create()
-                    //.addPart("file", bin)
-                    .setCharset(Charset.forName("UTF-8"))
-                    //.setContentType(ContentType.MULTIPART_FORM_DATA)
-                    .addBinaryBody("file", content)
-                    .addTextBody("token", token)
-                    .addTextBody("filename", UUID.randomUUID().toString());
+                    // .addPart("file", bin)
+                    // .setCharset(StandardCharsets.UTF_8)
+                    .setContentType(ContentType.create("multipart/form-data", (Charset) null))
+                    .addBinaryBody("file", content, ContentType.DEFAULT_BINARY, "xxx.xlsx");
+            if (Objects.nonNull(params)) {
+                for (Map.Entry<String, String> entry : params.entrySet()) {
+                    builder.addTextBody(entry.getKey(), entry.getValue(), ContentType.create("text/plain", StandardCharsets.UTF_8));
+                }
+                // builder.addTextBody("token", token).addTextBody("filename", UUID.randomUUID().toString());
+            }
             httppost.setEntity(builder.build());
             CloseableHttpResponse response = httpclient.execute(httppost);
             return responseHandle(response);
