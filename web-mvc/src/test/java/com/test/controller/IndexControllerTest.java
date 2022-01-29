@@ -1,22 +1,26 @@
 package com.test.controller;
 
+import com.test.service.IndexService;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-@SpringBootTest
-@ExtendWith(SpringExtension.class)
+@WebMvcTest(IndexController.class)
 class IndexControllerTest {
 
     @Autowired
+    private IndexController indexController;
+    @MockBean
+    private IndexService indexService;
+    @Autowired
+    private MockMvc mockMvc;
+    /*@Autowired
     private RestTemplate restTemplate;
 
     @Test
@@ -37,6 +41,25 @@ class IndexControllerTest {
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<>(map, headers);
         String forObject = restTemplate.postForObject(url, request, String.class);
         System.out.println(forObject);
+    }*/
+
+    @Test
+    void indexTest() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.get("/index")
+                .param("name", "lucy")
+                .param("age", "10"))
+            //.andDo(MockMvcResultHandlers.print())
+            .andExpect(MockMvcResultMatchers.status().isOk())
+            .andExpect(MockMvcResultMatchers.content().string("index"));
+    }
+
+    @Test
+    void helloTest() throws Exception {
+        Mockito.when(indexService.hello(Mockito.anyString())).thenReturn("hello ok");
+        mockMvc.perform(MockMvcRequestBuilders.get("/hello/lucy"))
+            .andDo(MockMvcResultHandlers.print())
+            .andExpect(MockMvcResultMatchers.status().isOk())
+            .andExpect(MockMvcResultMatchers.content().string("hello ok"));
     }
 
 }

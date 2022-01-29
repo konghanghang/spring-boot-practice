@@ -16,8 +16,3 @@ knife4j:
     contactEmail: yslao@outlook.com
     groupName: web-mvc-v1.0
     basePackage: com.test.controller
-
-application:
-  log:
-    argument: true
-    result: true
