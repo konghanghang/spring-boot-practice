@@ -9,4 +9,6 @@ public class TestVo {
 
     private String accountName;
 
+    private String agentTag;
+
 }

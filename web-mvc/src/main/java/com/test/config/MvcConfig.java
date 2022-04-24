@@ -2,12 +2,14 @@ package com.test.config;
 
 import com.iminling.common.json.JsonUtil;
 import com.test.config.redis.CustomizeJacksonRedisSerializer;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 
 @Configuration
+@EnableCaching
 public class MvcConfig {
 
     @Bean
@@ -26,4 +28,15 @@ public class MvcConfig {
         return template;
     }
 
+    /*@Bean
+    public CacheManager cacheManager(RedisConnectionFactory redisConnectionFactory) {
+        RedisCacheConfiguration configuration = RedisCacheConfiguration.defaultCacheConfig()
+            .serializeKeysWith(
+                RedisSerializationContext.SerializationPair.fromSerializer(new StringRedisSerializer())
+            ).serializeValuesWith(
+                RedisSerializationContext.SerializationPair.fromSerializer(new GenericJackson2JsonRedisSerializer())
+            );
+        return RedisCacheManager.builder(redisConnectionFactory).cacheDefaults(configuration).build();
+    }
+*/
 }
