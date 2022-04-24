@@ -1,5 +1,6 @@
-package com.test.cloud.config.feign;
+package com.test.cloud.config.feign.param;
 
+import com.test.cloud.config.feign.TokenInterceptor;
 import feign.Contract;
 import feign.Feign;
 import feign.Logger.Level;

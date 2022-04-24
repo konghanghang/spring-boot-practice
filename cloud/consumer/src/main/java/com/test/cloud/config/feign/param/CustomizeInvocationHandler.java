@@ -1,4 +1,4 @@
-package com.test.cloud.config.feign;
+package com.test.cloud.config.feign.param;
 
 import com.iminling.core.annotation.EnableResolve;
 import feign.Feign;

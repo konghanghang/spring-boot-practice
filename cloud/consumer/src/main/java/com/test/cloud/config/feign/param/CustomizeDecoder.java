@@ -1,4 +1,4 @@
-package com.test.cloud.config.feign;
+package com.test.cloud.config.feign.param;
 
 import com.iminling.common.json.JsonUtil;
 import com.iminling.core.config.value.ResultModel;

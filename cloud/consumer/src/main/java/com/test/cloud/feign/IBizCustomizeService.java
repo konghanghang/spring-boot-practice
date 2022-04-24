@@ -1,7 +1,7 @@
 package com.test.cloud.feign;
 
 import com.iminling.core.annotation.EnableResolve;
-import com.test.cloud.config.feign.FeignConfiguration;
+import com.test.cloud.config.feign.param.FeignConfiguration;
 import com.test.cloud.model.User;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;

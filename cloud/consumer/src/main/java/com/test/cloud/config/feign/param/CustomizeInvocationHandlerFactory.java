@@ -1,4 +1,4 @@
-package com.test.cloud.config.feign;
+package com.test.cloud.config.feign.param;
 
 import feign.InvocationHandlerFactory;
 import feign.Target;
