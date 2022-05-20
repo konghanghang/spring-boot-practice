@@ -63,9 +63,9 @@
             <artifactId>iminling-core</artifactId>
         </dependency>
         <dependency>
-            <groupId>com.baomidou</groupId>
-            <artifactId>mybatis-plus-core</artifactId>
-            <version>3.4.0</version>
+            <groupId>com.test</groupId>
+            <artifactId>api</artifactId>
+            <version>1.0.0</version>
         </dependency>
     </dependencies>
 

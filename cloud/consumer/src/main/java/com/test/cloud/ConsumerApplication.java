@@ -14,7 +14,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
  */
 @SpringBootApplication(exclude = DataSourceAutoConfiguration.class)
 @EnableEurekaClient
-@EnableFeignClients(basePackages = "com.test.cloud.feign")
+@EnableFeignClients(basePackages = "com.test.api.client")
 @EnableHystrix
 @EnableDiscoveryClient
 public class ConsumerApplication {

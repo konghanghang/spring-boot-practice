@@ -23,6 +23,7 @@
         <module>gateway-9527</module>
         <module>provider</module>
         <module>consumer</module>
+      <module>api</module>
     </modules>
 
     <dependencyManagement>

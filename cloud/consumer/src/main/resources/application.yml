@@ -13,19 +13,23 @@ feign:
     config:
       default:
         # 超时时间
-        connect-timeout: 10000
-        read-timeout: 10000
+        connect-timeout: 16000
+        read-timeout: 16000
         logger-level: full
   hystrix:
-    enabled: false
+    enabled: true
 hystrix:
   command:
     default:
       execution:
+        timeout:
+          enabled: true
         isolation:
           thread:
             timeoutInMilliseconds: 15000
-
+ribbon:
+  ReadTimeout: 56000
+  ConnectTimeout: 56000
 logging:
   level:
     com.test.cloud.feign.iBizService: debug

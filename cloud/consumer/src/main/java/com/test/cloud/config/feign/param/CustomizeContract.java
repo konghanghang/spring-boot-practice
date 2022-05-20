@@ -5,7 +5,7 @@ import static feign.Util.emptyToNull;
 import static java.util.Optional.ofNullable;
 
 import com.iminling.core.annotation.EnableResolve;
-import com.test.cloud.config.utils.TypeUtils;
+import com.test.cloud.config.feign.param.utils.TypeUtils;
 import feign.Feign;
 import feign.MethodMetadata;
 import feign.Param.ToStringExpander;
