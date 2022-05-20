@@ -9,12 +9,13 @@ import org.springframework.web.bind.annotation.*;
  * @since 2022/4/24
  */
 @FeignClient(name = "provider", contextId = "productInfo")
+@RequestMapping("/product")
 public interface ProductInfoClient {
 
-    @PostMapping("/product/add")
+    @PostMapping("/add")
     Integer add(@RequestBody ProductInfo info);
 
-    @GetMapping("/product/{id}")
+    @GetMapping("/{id}")
     ProductInfo get(@PathVariable(name = "id") Integer id);
 
 }

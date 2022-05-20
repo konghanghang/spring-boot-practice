@@ -53,7 +53,7 @@ public class FeignClientConfiguration {
      * 处理：@FeignClient中的@RequestMapping也被SpringMVC加载的问题解决
      * @return
      */
-    // @Bean
+    @Bean
     public WebMvcRegistrations feignWebRegistrations() {
         return new WebMvcRegistrations() {
             @Override
