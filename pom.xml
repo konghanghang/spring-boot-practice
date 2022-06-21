@@ -35,7 +35,7 @@
         <spring.boot-version>2.3.5.RELEASE</spring.boot-version>
         <spring-version>5.2.10.RELEASE</spring-version>
         <mybatis-plus-version>3.4.0</mybatis-plus-version>
-        <mysql-version>8.0.20</mysql-version>
+        <mysql-version>8.0.28</mysql-version>
         <lombok-version>1.16.20</lombok-version>
         <druid-version>1.2.3</druid-version>
         <guava-version>30.0-jre</guava-version>
