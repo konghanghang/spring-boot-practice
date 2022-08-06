@@ -73,10 +73,6 @@ netty肤浅学习
 
 本模块主要是研究shiro,已经实现的有对rest风格的url的支持,实例还不是很完整,但是核心代码基本都已齐全.
 
-## spark
-
-spark肤浅学习
-
 ## spring
 
 主要是用来研究spring的ioc和aop功能

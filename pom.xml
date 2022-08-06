@@ -16,7 +16,6 @@
         <module>kafka</module>
         <module>shiro</module>
         <module>elasticsearch-7.6</module>
-        <module>spark</module>
         <module>tools</module>
         <module>cloud</module>
         <module>netty-study</module>
