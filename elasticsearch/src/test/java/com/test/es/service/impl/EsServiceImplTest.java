@@ -1,6 +1,6 @@
 package com.test.es.service.impl;
 
-import com.alibaba.fastjson.JSON;
+import com.iminling.common.json.JsonUtil;
 import com.test.es.model.MappingFieldInfo;
 import com.test.es.service.IEsService;
 import org.junit.Test;
@@ -100,6 +100,6 @@ public class EsServiceImplTest {
         List<String> indexs = new ArrayList<>();
         indexs.add("es_test");
         List<Map<String, Object>> doc = esService.query(indexs, "doc", null);
-        doc.stream().forEach(c -> System.out.println(JSON.toJSONString(c)));
+        doc.stream().forEach(c -> System.out.println(JsonUtil.obj2Str(c)));
     }
 }

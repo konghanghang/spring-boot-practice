@@ -1,9 +1,14 @@
 package com.test;
 
-import com.alibaba.fastjson.JSON;
+import com.iminling.common.json.JsonUtil;
 import io.searchbox.client.JestClient;
 import io.searchbox.core.Search;
 import io.searchbox.core.SearchResult;
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
+import javax.annotation.Resource;
 import org.apache.http.entity.ContentType;
 import org.apache.http.nio.entity.NStringEntity;
 import org.apache.http.util.EntityUtils;
@@ -36,12 +41,6 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
-
-import javax.annotation.Resource;
-import java.io.IOException;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.*;
 
 @SpringBootTest
 @RunWith(SpringRunner.class)
@@ -130,7 +129,7 @@ public class EsTest {
         map.put("age", 343);
         map.put("createTime", LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS")));
         add.setEntity(new NStringEntity(
-                JSON.toJSONString(map),
+                JsonUtil.obj2Str(map),
                 ContentType.APPLICATION_JSON));
         Response addResponse = restClient.performRequest(add);
         System.out.println(EntityUtils.toString(addResponse.getEntity()));

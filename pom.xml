@@ -74,11 +74,6 @@
             </dependency>
 
             <dependency>
-                <groupId>com.alibaba</groupId>
-                <artifactId>fastjson</artifactId>
-                <version>1.2.70</version>
-            </dependency>
-            <dependency>
                 <groupId>com.iminling</groupId>
                 <artifactId>iminling-core</artifactId>
                 <version>${base.core-version}</version>

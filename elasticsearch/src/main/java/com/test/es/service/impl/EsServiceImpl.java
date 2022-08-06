@@ -1,10 +1,13 @@
 package com.test.es.service.impl;
 
-import com.alibaba.fastjson.JSON;
 import com.carrotsearch.hppc.cursors.ObjectObjectCursor;
+import com.iminling.common.json.JsonUtil;
 import com.test.es.model.EsPage;
 import com.test.es.model.MappingFieldInfo;
 import com.test.es.service.IEsService;
+import java.io.IOException;
+import java.util.*;
+import javax.annotation.Resource;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpStatus;
 import org.elasticsearch.action.admin.cluster.state.ClusterStateResponse;
@@ -39,10 +42,6 @@ import org.elasticsearch.search.sort.SortOrder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-
-import javax.annotation.Resource;
-import java.io.IOException;
-import java.util.*;
 
 @Service
 public class EsServiceImpl implements IEsService {
@@ -179,7 +178,7 @@ public class EsServiceImpl implements IEsService {
                 ObjectObjectCursor<String, MappingMetaData> cursor = (ObjectObjectCursor)iterator.next();
                 if (((String)cursor.key).equals("doc")) {
                     String source = (cursor.value).source().toString();
-                    Map map = JSON.parseObject(source, Map.class);
+                    Map map = JsonUtil.str2Obj(source, Map.class);
                     Map<String, Object> doc = (Map)map.get("doc");
                     Map<String, Object> properties = (Map)doc.get("properties");
                     List<Map<String, String>> fields = new ArrayList();

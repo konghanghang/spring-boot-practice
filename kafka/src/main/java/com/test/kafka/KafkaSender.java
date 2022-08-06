@@ -1,6 +1,7 @@
 package com.test.kafka;
 
-import com.alibaba.fastjson.JSON;
+import com.iminling.common.json.JsonUtil;
+import javax.annotation.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -8,8 +9,6 @@ import org.springframework.kafka.support.SendResult;
 import org.springframework.stereotype.Component;
 import org.springframework.util.concurrent.ListenableFuture;
 import org.springframework.util.concurrent.ListenableFutureCallback;
-
-import javax.annotation.Resource;
 
 @Component
 public class KafkaSender<T> {
@@ -25,7 +24,7 @@ public class KafkaSender<T> {
      * @param obj
      */
     public void send(String topic, T obj) {
-        String jsonObj = JSON.toJSONString(obj);
+        String jsonObj = JsonUtil.obj2Str(obj);
         logger.info("------------ message = {}", jsonObj);
         //发送消息
         ListenableFuture<SendResult<String, Object>> future = kafkaTemplate.send(topic, jsonObj);

@@ -27,8 +27,9 @@
         </dependency>
 
         <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>fastjson</artifactId>
+            <groupId>com.iminling</groupId>
+            <artifactId>iminling-common</artifactId>
+            <version>${base.core-version}</version>
         </dependency>
     </dependencies>
 

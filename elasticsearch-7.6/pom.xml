@@ -71,12 +71,13 @@
             <version>6.3.1</version>
         </dependency>
         <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>fastjson</artifactId>
-        </dependency>
-        <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.iminling</groupId>
+            <artifactId>iminling-common</artifactId>
+            <version>${base.core-version}</version>
         </dependency>
     </dependencies>
 
