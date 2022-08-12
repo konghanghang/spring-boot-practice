@@ -1,7 +1,6 @@
 package com.test.cloud.config.feign;
 
 import com.iminling.common.http.OkHttpUtils;
-import com.test.cloud.config.feign.client.CustomizeFeignClient;
 import com.test.cloud.config.feign.decode.ResponseDecoder;
 import feign.Client;
 import feign.codec.Decoder;
@@ -10,10 +9,7 @@ import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.http.HttpMessageConverters;
 import org.springframework.boot.autoconfigure.web.servlet.WebMvcRegistrations;
-import org.springframework.cloud.netflix.ribbon.SpringClientFactory;
 import org.springframework.cloud.openfeign.FeignClient;
-import org.springframework.cloud.openfeign.ribbon.CachingSpringLoadBalancerFactory;
-import org.springframework.cloud.openfeign.ribbon.LoadBalancerFeignClient;
 import org.springframework.cloud.openfeign.support.ResponseEntityDecoder;
 import org.springframework.cloud.openfeign.support.SpringDecoder;
 import org.springframework.context.annotation.Bean;
@@ -42,11 +38,12 @@ public class FeignClientConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    public Client feignClient(CachingSpringLoadBalancerFactory cachingFactory, SpringClientFactory clientFactory) {
+    public Client feignClient() {
         OkHttpClient okHttpClient = OkHttpUtils.Companion.okHttpClientBuilder()
             .retryOnConnectionFailure(false).build();
-        CustomizeFeignClient feignOkHttpClient = new CustomizeFeignClient(okHttpClient);
-        return new LoadBalancerFeignClient(feignOkHttpClient, cachingFactory, clientFactory);
+        // CustomizeFeignClient feignOkHttpClient = new CustomizeFeignClient(okHttpClient);
+        return new feign.okhttp.OkHttpClient(okHttpClient);
+        // return new LoadBalancerFeignClient(feignOkHttpClient, cachingFactory, clientFactory);
     }
 
     /**

@@ -1,7 +1,6 @@
 package com.test.cloud.feign;
 
 import com.iminling.core.annotation.EnableResolve;
-import com.test.cloud.config.feign.param.FeignConfiguration;
 import com.test.cloud.model.User;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
  * nacos对client名称区分大小写，eureka不区分
  */
 @EnableResolve
-@FeignClient(value = "provider", contextId = "customize", configuration = FeignConfiguration.class)
+@FeignClient(value = "provider", contextId = "customize")
 public interface IBizCustomizeService {
 
     @GetMapping("/hystrix/ok/{id}")

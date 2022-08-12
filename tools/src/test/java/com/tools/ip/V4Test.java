@@ -1,7 +1,7 @@
 package com.tools.ip;
 
 import com.tools.ip.ipv4.Ipv4Service;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 public class V4Test {
 

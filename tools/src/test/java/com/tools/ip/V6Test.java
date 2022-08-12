@@ -1,9 +1,8 @@
 package com.tools.ip;
 
 import com.tools.ip.ipv6.Ipv6Service;
-import org.junit.Test;
-
 import java.math.BigInteger;
+import org.junit.jupiter.api.Test;
 
 public class V6Test {
 

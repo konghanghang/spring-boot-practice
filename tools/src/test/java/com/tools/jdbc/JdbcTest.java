@@ -3,8 +3,8 @@ package com.tools.jdbc;
 import com.tools.jdbc.constant.DatasourceTypeEnum;
 import com.tools.jdbc.model.DatasourceInfo;
 import com.tools.jdbc.tool.JdbcUtils;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class JdbcTest {
 
@@ -19,7 +19,7 @@ public class JdbcTest {
         datasourceInfo.setPassword("");
         String jdbcUrl = JdbcUtils.getJdbcUrl(datasourceInfo.getType(), datasourceInfo.getIp(), datasourceInfo.getPort(), datasourceInfo.getDatabaseName(), datasourceInfo.getSidType());
         boolean canConnection = JdbcUtils.isCanConnection(jdbcUrl, datasourceInfo.getUsername(), datasourceInfo.getPassword());
-        Assert.assertEquals(true, canConnection);
+        Assertions.assertEquals(true, canConnection);
     }
 
 }

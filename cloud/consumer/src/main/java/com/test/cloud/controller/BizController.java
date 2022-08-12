@@ -1,7 +1,5 @@
 package com.test.cloud.controller;
 
-import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
-import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 import com.test.cloud.feign.IBizCustomizeService;
 import com.test.cloud.feign.IBizService;
 import com.test.cloud.model.User;
@@ -43,17 +41,11 @@ public class BizController {
      * @return
      */
     @GetMapping("/time/{id}")
-    @HystrixCommand(fallbackMethod="bizTimeHandler", commandProperties = {
-            @HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "1500")
-    })
     public String time(@PathVariable("id") String id) {
         if ("-1".equals(id)) {
             throw new RuntimeException("-1");
         }
         return bizService.time(id);
-    }
-    public String bizTimeHandler(@PathVariable("id") String id) {
-        return "我是消费者，服务提供者出现问题。";
     }
 
     /**
@@ -64,16 +56,11 @@ public class BizController {
      * @return
      */
     @GetMapping("/circuit/{id}")
-    @HystrixCommand
     public String circuit(@PathVariable("id") Integer id) {
         if (id == -1) {
             throw new RuntimeException("-1");
         }
         return bizService.circuit(id);
-    }
-
-    public String globalHandler() {
-        return "我是global全局降级方法。";
     }
 
     @GetMapping("/param")
