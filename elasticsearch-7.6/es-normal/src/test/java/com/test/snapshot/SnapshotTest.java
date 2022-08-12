@@ -1,5 +1,7 @@
 package com.test.snapshot;
 
+import java.util.List;
+import javax.annotation.Resource;
 import org.apache.commons.lang3.StringUtils;
 import org.elasticsearch.action.admin.cluster.repositories.verify.VerifyRepositoryResponse;
 import org.elasticsearch.action.admin.cluster.snapshots.create.CreateSnapshotResponse;
@@ -17,20 +19,17 @@ import org.elasticsearch.rest.RestStatus;
 import org.elasticsearch.snapshots.Snapshot;
 import org.elasticsearch.snapshots.SnapshotId;
 import org.elasticsearch.snapshots.SnapshotInfo;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
-
-import javax.annotation.Resource;
-import java.util.List;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 /**
  * 参考地址：https://dzone.com/articles/how-use-elasticsearch-snapshot
  * https://blog.csdn.net/yangshangwei/article/details/104072859?utm_medium=distribute.pc_relevant_t0.none-task-blog-BlogCommendFromMachineLearnPai2-1.nonecase&depth_1-utm_source=distribute.pc_relevant_t0.none-task-blog-BlogCommendFromMachineLearnPai2-1.nonecase
  */
 @SpringBootTest
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 public class SnapshotTest {
 
     @Resource

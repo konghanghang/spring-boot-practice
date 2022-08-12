@@ -14,8 +14,9 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <spring.cloud-version>Hoxton.SR9</spring.cloud-version>
-        <spring.alibaba.cloud-version>2.1.0.RELEASE</spring.alibaba.cloud-version>
+        <spring.cloud-version>2021.0.3</spring.cloud-version>
+        <spring.alibaba.cloud-version>2021.0.1.0</spring.alibaba.cloud-version>
+        <base.core-version>2.2.3-SNAPSHOT</base.core-version>
     </properties>
 
     <modules>

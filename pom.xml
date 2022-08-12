@@ -30,13 +30,11 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
-        <base.core-version>2.2.2-SNAPSHOT</base.core-version>
-        <spring.boot-version>2.3.5.RELEASE</spring.boot-version>
-        <spring-version>5.2.10.RELEASE</spring-version>
+        <base.core-version>2.2.3-SNAPSHOT</base.core-version>
+        <spring.boot-version>2.6.7</spring.boot-version>
         <mybatis-plus-version>3.4.0</mybatis-plus-version>
         <mysql-version>8.0.20</mysql-version>
         <lombok-version>1.16.20</lombok-version>
-        <druid-version>1.2.3</druid-version>
         <guava-version>30.0-jre</guava-version>
         <commons-lang3-version>3.11</commons-lang3-version>
         <commons-compress-version>1.20</commons-compress-version>
@@ -75,6 +73,12 @@
 
             <dependency>
                 <groupId>com.iminling</groupId>
+                <artifactId>iminling-common</artifactId>
+                <version>${base.core-version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.iminling</groupId>
                 <artifactId>iminling-core</artifactId>
                 <version>${base.core-version}</version>
             </dependency>
@@ -99,12 +103,6 @@
                 <groupId>org.projectlombok</groupId>
                 <artifactId>lombok</artifactId>
                 <version>${lombok-version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>com.alibaba</groupId>
-                <artifactId>druid-spring-boot-starter</artifactId>
-                <version>${druid-version}</version>
             </dependency>
 
             <dependency>

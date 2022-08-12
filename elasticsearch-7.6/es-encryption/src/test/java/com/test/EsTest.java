@@ -35,15 +35,15 @@ import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.elasticsearch.search.sort.SortOrder;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @SpringBootTest
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 public class EsTest {
 
     @Resource
@@ -85,7 +85,7 @@ public class EsTest {
         map.put("createTime", LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS")));
         IndexResponse indexResponse = client.prepareIndex(index, "doc").setSource(map).get();
         RestStatus status = indexResponse.status();
-        Assert.assertEquals("CREATED", status.name());
+        Assertions.assertEquals("CREATED", status.name());
 
 
         BoolQueryBuilder boolQueryBuilder = QueryBuilders.boolQuery();
