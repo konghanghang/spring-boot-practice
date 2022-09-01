@@ -16,3 +16,6 @@ info:
   company.name: cloud
   build.artifactId: $project.artifactId$
   build.version: $project.version$
+knife4j:
+  info:
+    enable: false

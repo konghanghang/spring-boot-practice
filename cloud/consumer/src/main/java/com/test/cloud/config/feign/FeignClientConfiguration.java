@@ -13,7 +13,6 @@ import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.cloud.openfeign.support.ResponseEntityDecoder;
 import org.springframework.cloud.openfeign.support.SpringDecoder;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.AnnotatedElementUtils;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
@@ -21,7 +20,7 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
  * @author yslao@outlook.com
  * @since 2022/4/24
  */
-@Configuration
+// @Configuration
 public class FeignClientConfiguration {
 
     private final ObjectFactory<HttpMessageConverters> messageConverters;
