@@ -1,6 +1,6 @@
 eureka:
   client:
-    enabled: true
+    enabled: false
     register-with-eureka: true
     fetch-registry: true
     healthcheck:
@@ -17,8 +17,9 @@ spring:
   cloud:
     nacos:
       discovery:
-        enabled: false
+        enabled: true
         server-addr: localhost:8848
+        namespace: dev
       config:
         enabled: false
         server-addr: localhost:8848

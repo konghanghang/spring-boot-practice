@@ -2,15 +2,16 @@ package com.test.jpa.service.impl;
 
 import com.test.jpa.dao.StudentRepository;
 import com.test.jpa.model.Student;
-import java.util.List;
-import java.util.Optional;
-import javax.annotation.Resource;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+
+import javax.annotation.Resource;
+import java.util.List;
+import java.util.Optional;
 
 @ExtendWith(SpringExtension.class )
 @SpringBootTest
@@ -46,6 +47,18 @@ class StudentServiceImplTest {
     @Test
     void findByNumber() {
         Student student = studentRepository.findByNumber("13100000000");
+        System.out.println(student);
+    }
+
+    @Test
+    void queryByNameUseHQL() {
+        Student student = studentRepository.queryByNameUseHQL("张三");
+        System.out.println(student);
+    }
+
+    @Test
+    void queryByNameUseSQL() {
+        Student student = studentRepository.queryByNameUseSQL("张三");
         System.out.println(student);
     }
 
