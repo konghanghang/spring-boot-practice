@@ -42,20 +42,18 @@ public class OkHttpLoggingInterceptor implements Interceptor {
         Map<String, List<String>> stringListMap = request.headers().toMultimap();
         stringListMap.entrySet().removeIf(entry -> ignoreHeaders.contains(entry.getKey()));
         log.info("url:{}, method:{}, body:{}, headers:{}", url, method, body, stringListMap);
-        Exception error = null;
         Response response = null;
         try {
             response = chain.proceed(request);
             return response;
         } catch (Exception e) {
-            error = e;
             throw e;
         } finally {
             BufferedSource source = response.body().source();
             source.request(Long.MAX_VALUE);
             Buffer buffer = source.getBuffer();
             String responseBody = buffer.clone().readUtf8();
-            log.info("response:{}", responseBody);
+            log.info("response:{}, use time:{}", responseBody, System.currentTimeMillis() - startTime);
         }
     }
 }
