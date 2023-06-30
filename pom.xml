@@ -13,7 +13,6 @@
         <module>zookeeper-api</module>
         <module>elasticsearch</module>
         <module>web-mvc</module>
-        <module>kafka</module>
         <module>shiro</module>
         <module>elasticsearch-7.6</module>
         <module>tools</module>
@@ -24,6 +23,7 @@
         <module>JDK</module>
         <module>design-pattern</module>
       <module>jpa</module>
+      <module>mq</module>
     </modules>
 
     <properties>
