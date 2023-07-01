@@ -18,7 +18,7 @@ public class MQProducerService {
     @Value("${rocketmq.producer.send-message-timeout}")
     private Integer messageTimeOut;
 
-    private static final String topic = "TEST_TOPIC";
+    private static final String topic = "my_test";
 
     // 直接注入使用，用于发送消息到broker服务器
     @Autowired

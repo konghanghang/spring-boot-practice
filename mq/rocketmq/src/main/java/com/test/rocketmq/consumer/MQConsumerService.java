@@ -16,7 +16,7 @@ public class MQConsumerService {
     // topic需要和生产者的topic一致，consumerGroup属性是必须指定的，内容可以随意
     // selectorExpression的意思指的就是tag，默认为“*”，不设置的话会监听所有消息
     @Service
-    @RocketMQMessageListener(topic = "TEST_TOPIC", selectorExpression = "tag1", consumerGroup = "Con_Group_One")
+    @RocketMQMessageListener(topic = "my_test", selectorExpression = "tag1", consumerGroup = "Con_Group_One")
     public class ConsumerSend implements RocketMQListener<User> {
         // 监听到消息就会执行此方法
         @Override
