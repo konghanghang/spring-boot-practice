@@ -28,13 +28,13 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>8</maven.compiler.source>
-        <maven.compiler.target>8</maven.compiler.target>
-        <base.core-version>2.2.3-SNAPSHOT</base.core-version>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+        <base.core-version>2022.0.8-SNAPSHOT</base.core-version>
         <spring.boot-version>2.6.7</spring.boot-version>
         <mybatis-plus-version>3.4.0</mybatis-plus-version>
         <mysql-version>8.0.20</mysql-version>
-        <lombok-version>1.16.20</lombok-version>
+        <lombok-version>1.18.24</lombok-version>
         <guava-version>30.0-jre</guava-version>
         <commons-lang3-version>3.11</commons-lang3-version>
         <commons-compress-version>1.20</commons-compress-version>
