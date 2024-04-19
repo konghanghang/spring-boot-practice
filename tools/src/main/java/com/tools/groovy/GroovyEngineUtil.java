@@ -5,12 +5,14 @@ import groovy.lang.*;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 
 @Slf4j
 public class GroovyEngineUtil {
 
+    @Getter
     private final static Map<String, GroovyObject> GROOVY_OBJECT_MAP = new ConcurrentHashMap<>();
 
     /**
