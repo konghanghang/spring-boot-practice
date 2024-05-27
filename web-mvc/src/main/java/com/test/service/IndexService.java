@@ -4,8 +4,10 @@ package com.test.service;
  * @author yslao@outlook.com
  * @since 2022/1/29
  */
-public interface IndexService {
+public class IndexService {
 
-    String hello(String name);
+    public String hello(String name) {
+        return "hello " + name;
+    }
 
 }
