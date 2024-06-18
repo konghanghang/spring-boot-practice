@@ -1,3 +1,4 @@
+/*
 package com.test.config.swagger;
 
 import com.fasterxml.jackson.annotation.JsonValue;
@@ -16,10 +17,12 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spi.schema.ModelPropertyBuilderPlugin;
 import springfox.documentation.spi.schema.contexts.ModelPropertyContext;
 
+*/
 /**
  * @author yslao@outlook.com
  * @since 2021/12/8
- */
+ *//*
+
 //@Component
 public class CustModelPropertyBuilderPlugin implements ModelPropertyBuilderPlugin {
 
@@ -85,3 +88,4 @@ public class CustModelPropertyBuilderPlugin implements ModelPropertyBuilderPlugi
         return true;
     }
 }
+*/

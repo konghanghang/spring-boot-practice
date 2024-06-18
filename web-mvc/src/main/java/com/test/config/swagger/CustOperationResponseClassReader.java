@@ -1,3 +1,4 @@
+/*
 package com.test.config.swagger;
 
 import static java.util.stream.Collectors.toList;
@@ -36,10 +37,12 @@ import springfox.documentation.spi.service.contexts.ParameterContext;
 import springfox.documentation.spring.web.plugins.DocumentationPluginsManager;
 import springfox.documentation.spring.web.readers.operation.ResponseMessagesReader;
 
+*/
 /**
  * @author yslao@outlook.com
  * @since 2021/12/7
- */
+ *//*
+
 //@Component
 public class CustOperationResponseClassReader implements OperationBuilderPlugin {
 
@@ -128,12 +131,14 @@ public class CustOperationResponseClassReader implements OperationBuilderPlugin 
         return true;
     }
 
-    /**
+    */
+/**
      * 参考springfox.documentation.spring.web.readers.operation.ResponseMessagesReader
      * @param context
      * @param returnType
      * @param modelContext
-     */
+     *//*
+
     private void applyReturnTypeOverride(OperationContext context, ResolvedType returnType, ModelContext modelContext) {
         int httpStatusCode = ResponseMessagesReader.httpStatusCode(context);
         String message = ResponseMessagesReader.message(context);
@@ -158,11 +163,13 @@ public class CustOperationResponseClassReader implements OperationBuilderPlugin 
         context.operationBuilder().responseMessages(Collections.singleton(built));
     }
 
-    /**
+    */
+/**
      * springfox.documentation.spring.web.readers.operation.OperationParameterReader
      * @param context
      * @return
-     */
+     *//*
+
     private List<Parameter> readParameters(final OperationContext context) {
         List<Parameter> parameters = new ArrayList<>();
         try {
@@ -183,3 +190,4 @@ public class CustOperationResponseClassReader implements OperationBuilderPlugin 
     }
 
 }
+*/

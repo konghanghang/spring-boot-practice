@@ -1,3 +1,4 @@
+/*
 package com.test.config.swagger;
 
 import com.google.common.collect.Lists;
@@ -10,10 +11,12 @@ import springfox.documentation.spi.service.ParameterBuilderPlugin;
 import springfox.documentation.spi.service.contexts.OperationContext;
 import springfox.documentation.spi.service.contexts.ParameterContext;
 
+*/
 /**
  * @author yslao@outlook.com
  * @since 2021/12/7
- */
+ *//*
+
 //@Component
 public class CustParameterBuilderPlugin implements ParameterBuilderPlugin {
 
@@ -44,3 +47,4 @@ public class CustParameterBuilderPlugin implements ParameterBuilderPlugin {
         return true;
     }
 }
+*/

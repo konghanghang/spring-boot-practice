@@ -10,6 +10,31 @@ spring:
   application:
     name: web-mvc
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    shutdown:
+      enabled: true
+    restart:
+      enabled: true
+  metrics:
+    tags:
+      application: ${spring.application.name}
+    enable:
+      jvm: true
+      logback: false
+      process.files: false
+      process.uptime: false
+      process.start.time: false
+      system.cpu: false
+      process.cpu: false
+      tomcat: false
+      http: false
+      system: false
+
 knife4j:
   info:
     description: web-mvc接口文档

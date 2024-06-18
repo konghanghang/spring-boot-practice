@@ -1,3 +1,4 @@
+/*
 package com.test.config.swagger;
 
 import com.fasterxml.classmate.ResolvedType;
@@ -26,10 +27,12 @@ import springfox.documentation.spi.schema.ViewProviderPlugin;
 import springfox.documentation.spi.service.OperationModelsProviderPlugin;
 import springfox.documentation.spi.service.contexts.RequestMappingContext;
 
+*/
 /**
  * @author yslao@outlook.com
  * @since 2021/12/6
- */
+ *//*
+
 //@Component
 public class CustOperationModelsProvider implements OperationModelsProviderPlugin {
 
@@ -145,3 +148,4 @@ public class CustOperationModelsProvider implements OperationModelsProviderPlugi
         }
     }
 }
+*/
