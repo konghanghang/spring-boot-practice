@@ -7,6 +7,7 @@ import com.test.vo.TestVo;
 import com.test.vo.UserVo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.boot.info.GitProperties;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
@@ -18,6 +19,8 @@ public class IndexController {
     private final IndexService indexService;
 
     private final BarkService barkService;
+
+    private final GitProperties gitProperties;
 
     @RequestMapping("/index")
     public String index(UserVo userVo) {
@@ -49,6 +52,12 @@ public class IndexController {
     @RequestMapping("/bark")
     public void barkSend() {
         barkService.sendNotice();
+    }
+
+    @GetMapping("/git/info")
+    public String getInfo() {
+        String branch = gitProperties.getBranch();
+        return branch;
     }
 
 }
