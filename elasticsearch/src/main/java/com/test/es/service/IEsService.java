@@ -6,6 +6,11 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Elasticsearch 7 single-mapping examples.
+ * The legacy type parameters are retained for source compatibility and ignored;
+ * documents use _doc and searches no longer filter by mapping type.
+ */
 public interface IEsService {
 
     boolean existIndex(String index);

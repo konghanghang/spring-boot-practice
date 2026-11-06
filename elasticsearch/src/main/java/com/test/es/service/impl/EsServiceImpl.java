@@ -1,7 +1,6 @@
 package com.test.es.service.impl;
 
 import com.carrotsearch.hppc.cursors.ObjectObjectCursor;
-import com.iminling.common.json.JsonUtil;
 import com.test.es.model.EsPage;
 import com.test.es.model.MappingFieldInfo;
 import com.test.es.service.IEsService;
@@ -16,7 +15,6 @@ import org.elasticsearch.action.admin.indices.create.CreateIndexResponse;
 import org.elasticsearch.action.admin.indices.delete.DeleteIndexRequestBuilder;
 import org.elasticsearch.action.admin.indices.exists.indices.IndicesExistsRequest;
 import org.elasticsearch.action.admin.indices.exists.indices.IndicesExistsResponse;
-import org.elasticsearch.action.admin.indices.get.GetIndexResponse;
 import org.elasticsearch.action.bulk.BulkRequestBuilder;
 import org.elasticsearch.action.bulk.BulkResponse;
 import org.elasticsearch.action.delete.DeleteResponse;
@@ -27,12 +25,11 @@ import org.elasticsearch.action.search.SearchType;
 import org.elasticsearch.action.support.IndicesOptions;
 import org.elasticsearch.action.support.master.AcknowledgedResponse;
 import org.elasticsearch.client.transport.TransportClient;
-import org.elasticsearch.cluster.metadata.IndexMetaData;
-import org.elasticsearch.cluster.metadata.MappingMetaData;
-import org.elasticsearch.common.collect.ImmutableOpenMap;
+import org.elasticsearch.cluster.metadata.IndexMetadata;
+import org.elasticsearch.cluster.metadata.MappingMetadata;
 import org.elasticsearch.common.text.Text;
-import org.elasticsearch.common.xcontent.XContentBuilder;
-import org.elasticsearch.common.xcontent.XContentFactory;
+import org.elasticsearch.xcontent.XContentBuilder;
+import org.elasticsearch.xcontent.XContentFactory;
 import org.elasticsearch.index.query.*;
 import org.elasticsearch.rest.RestStatus;
 import org.elasticsearch.search.SearchHit;
@@ -50,6 +47,8 @@ public class EsServiceImpl implements IEsService {
 
     @Resource
     private TransportClient client;
+
+    private static final String DOCUMENT_TYPE = "_doc";
 
     private final String dateFormat = "yyyy-MM-dd HH:mm:ss.SSS || date_time || strict_date_time";
     private final IndicesOptions IGNORE = IndicesOptions.fromOptions(true, true, true, false);
@@ -73,7 +72,7 @@ public class EsServiceImpl implements IEsService {
         XContentBuilder properties = XContentFactory.jsonBuilder().startObject().startObject("properties");
         properties.startObject("createTime").field("type", "date")
                 .field("format",dateFormat).endObject().endObject().endObject();
-        createIndexRequestBuilder.addMapping(type, properties);
+        createIndexRequestBuilder.addMapping(DOCUMENT_TYPE, properties);
         CreateIndexResponse createIndexResponse = createIndexRequestBuilder.execute().actionGet();
         return createIndexResponse.isAcknowledged();
     }
@@ -90,40 +89,39 @@ public class EsServiceImpl implements IEsService {
             properties.endObject();
         }
         properties.endObject().endObject();
-        createIndexRequestBuilder.addMapping(type, properties);
+        createIndexRequestBuilder.addMapping(DOCUMENT_TYPE, properties);
         CreateIndexResponse createIndexResponse = createIndexRequestBuilder.execute().actionGet();
         return createIndexResponse.isAcknowledged();
     }
 
     @Override
     public boolean insertRecord(Map<String, Object> record, String index) {
-        return insertRecord(record, index, "doc");
+        return insertRecord(record, index, DOCUMENT_TYPE);
     }
 
     @Override
     public boolean insertRecord(Map<String, Object> record, String index, String type) {
-        IndexResponse indexResponse = client.prepareIndex(index, type).setSource(record).get();
+        IndexResponse indexResponse = client.prepareIndex(index, DOCUMENT_TYPE).setSource(record).get();
         RestStatus status = indexResponse.status();
-        return "ok".equalsIgnoreCase(status.name());
+        return status == RestStatus.CREATED || status == RestStatus.OK;
     }
 
     @Override
     public boolean insertRecordBulk(List<Map<String, Object>> records, String index) {
-        return insertRecordBulk(records, index, "doc");
+        return insertRecordBulk(records, index, DOCUMENT_TYPE);
     }
 
     @Override
     public boolean insertRecordBulk(List<Map<String, Object>> records, String index, String type) {
         BulkRequestBuilder bulkRequestBuilder = client.prepareBulk();
-        records.stream().forEach(record -> bulkRequestBuilder.add(client.prepareIndex(index, type).setSource(record)));
+        records.stream().forEach(record -> bulkRequestBuilder.add(client.prepareIndex(index, DOCUMENT_TYPE).setSource(record)));
         BulkResponse response = bulkRequestBuilder.execute().actionGet();
-        RestStatus status = response.status();
-        return "ok".equalsIgnoreCase(status.name());
+        return !response.hasFailures();
     }
 
     @Override
     public boolean deleteRecordById(String index, String type, String id) {
-        DeleteResponse deleteResponse = client.prepareDelete(index, type, id).get();
+        DeleteResponse deleteResponse = client.prepareDelete(index, DOCUMENT_TYPE, id).get();
         RestStatus status = deleteResponse.status();
         return "ok".equalsIgnoreCase(status.name());
     }
@@ -138,7 +136,7 @@ public class EsServiceImpl implements IEsService {
                 boolQueryBuilder.must(new WildcardQueryBuilder(entry.getKey(), "*" + entry.getValue() + "*"));
             }
         }
-        SearchRequestBuilder searchRequestBuilder = client.prepareSearch(index.toArray(new String[]{})).setTypes(type)
+        SearchRequestBuilder searchRequestBuilder = client.prepareSearch(index.toArray(new String[]{}))
                 .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
                 .setQuery(boolQueryBuilder)
                 .setIndicesOptions(IGNORE)
@@ -148,7 +146,6 @@ public class EsServiceImpl implements IEsService {
         logger.info("search condition:{}", searchRequestBuilder);
         SearchResponse searchResponse = searchRequestBuilder.execute().actionGet();
         SearchHits hits = searchResponse.getHits();
-        long totalHits = hits.getTotalHits();
         SearchHit[] searchHits = hits.getHits();
         List<Map<String, Object>> list = new ArrayList<>();
         for (SearchHit hit : searchHits) {
@@ -162,42 +159,28 @@ public class EsServiceImpl implements IEsService {
 
     @Override
     public Object getIndexMappings() {
-        String[] indices = ((GetIndexResponse)client.admin().indices().prepareGetIndex().execute().actionGet()).getIndices();
-        List<Map<String, Object>> list = new ArrayList();
-        int var5 = indices.length;
-        byte var6 = 0;
-        if (var6 < var5) {
-            String index = indices[var6];
-            Map<String, Object> mappingInfo = new HashMap<>();
-            list.add(mappingInfo);
-            mappingInfo.put("indexName", index);
-            ImmutableOpenMap<String, MappingMetaData> mappings = ((IndexMetaData)((ClusterStateResponse)client.admin().cluster().prepareState().execute().actionGet()).getState().getMetaData().getIndices().get(index)).getMappings();
-            Iterator iterator = mappings.iterator();
-
-            while(iterator.hasNext()) {
-                ObjectObjectCursor<String, MappingMetaData> cursor = (ObjectObjectCursor)iterator.next();
-                if (((String)cursor.key).equals("doc")) {
-                    String source = (cursor.value).source().toString();
-                    Map map = JsonUtil.str2Obj(source, Map.class);
-                    Map<String, Object> doc = (Map)map.get("doc");
-                    Map<String, Object> properties = (Map)doc.get("properties");
-                    List<Map<String, String>> fields = new ArrayList();
-                    Iterator propertiesIterator = properties.entrySet().iterator();
-
-                    while(propertiesIterator.hasNext()) {
-                        Map.Entry<String, Object> entry = (Map.Entry)propertiesIterator.next();
-                        String key = (String)entry.getKey();
-                        Map<String, Object> value = (Map)entry.getValue();
-                        String type = value.get("type").toString();
-                        Map<String, String> field = new HashMap();
-                        field.put("name", key);
-                        field.put("type", type);
+        ClusterStateResponse response = client.admin().cluster().prepareState()
+                .clear().setMetadata(true).execute().actionGet();
+        List<Map<String, Object>> list = new ArrayList<>();
+        for (ObjectObjectCursor<String, IndexMetadata> index : response.getState().metadata().indices()) {
+            Map<String, Object> mappingInfo = new LinkedHashMap<>();
+            mappingInfo.put("indexName", index.key);
+            List<Map<String, String>> fields = new ArrayList<>();
+            MappingMetadata mapping = index.value.mapping();
+            if (mapping != null && mapping.sourceAsMap().get("properties") instanceof Map<?, ?> properties) {
+                for (Map.Entry<?, ?> property : properties.entrySet()) {
+                    if (property.getValue() instanceof Map<?, ?> definition) {
+                        Map<String, String> field = new LinkedHashMap<>();
+                        field.put("name", property.getKey().toString());
+                        // ES permits object fields to omit type when properties are present.
+                        Object fieldType = definition.get("type");
+                        field.put("type", fieldType == null ? "object" : fieldType.toString());
                         fields.add(field);
                     }
-                    mappingInfo.put("fields", fields);
-                    break;
                 }
             }
+            mappingInfo.put("fields", fields);
+            list.add(mappingInfo);
         }
         return list;
     }
@@ -206,7 +189,7 @@ public class EsServiceImpl implements IEsService {
      * 使用分词查询,并分页
      *
      * @param index          索引名称
-     * @param type           类型名称,可传入多个type逗号分隔
+     * @param type           旧接口兼容参数；ES 7 使用单一 mapping，不再按类型过滤
      * @param startPage      当前页
      * @param pageSize       每页显示条数
      * @param query          查询条件
@@ -217,9 +200,6 @@ public class EsServiceImpl implements IEsService {
      */
     private EsPage searchDataPage(String index, String type, int startPage, int pageSize, QueryBuilder query, String fields, String sortField, String highlightField) {
         SearchRequestBuilder searchRequestBuilder = client.prepareSearch(index);
-        if (StringUtils.isNotEmpty(type)) {
-            searchRequestBuilder.setTypes(type.split(","));
-        }
         searchRequestBuilder.setSearchType(SearchType.QUERY_THEN_FETCH);
 
         // 需要显示的字段，逗号分隔（缺省为全部字段）
@@ -248,7 +228,7 @@ public class EsServiceImpl implements IEsService {
         searchRequestBuilder.setQuery(query);
 
         // 分页应用
-        searchRequestBuilder.setFrom(startPage).setSize(pageSize);
+        searchRequestBuilder.setFrom(startPage).setSize(pageSize).setTrackTotalHits(true);
         // searchRequestBuilder.setSize(pageSize);
 
         // 设置是否按查询匹配度排序
@@ -260,7 +240,7 @@ public class EsServiceImpl implements IEsService {
         // 执行搜索,返回搜索响应信息
         SearchResponse searchResponse = searchRequestBuilder.execute().actionGet();
 
-        long totalHits = searchResponse.getHits().totalHits;
+        long totalHits = searchResponse.getHits().getTotalHits().value;
         long length = searchResponse.getHits().getHits().length;
 
         logger.info("共查询到[{}]条数据,处理数据条数[{}]", totalHits, length);

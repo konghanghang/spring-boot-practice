@@ -41,11 +41,11 @@ Web/MVC、Cloud provider、Shiro、工具模块的启动测试使用本机随机
 | Web | Jakarta API、Boot 4 模块化 starter、Tomcat；移除旧 Undertow starter |
 | JPA | Hibernate 7、MySQL 8+ 驱动/方言、QueryDSL 5.1 Jakarta；见 [JPA 说明](jpa/README.md) |
 | Shiro / ZooKeeper / RocketMQ Spring | `3.0.1` / `3.9.7` / `2.3.6` |
-| Elasticsearch | 6 系列 `6.8.23`，7 系列统一 `7.17.29`；保留 TCP TransportClient 示例，Netty 局部使用 `4.1.140.Final` |
-| 工具依赖 | Druid `1.2.28`、Guava `33.5.0-jre`、Commons IO `2.21.0`、OkHttp `4.12.0`、维护版 JSch `2.28.8`；Groovy/Mockito/JUnit 等由 Boot 管理 |
+| Elasticsearch | 两个 ES 示例目录均统一为 `7.17.29`；保留 TCP TransportClient 示例，Netty 局部使用 `4.1.140.Final` |
+| 工具依赖 | Druid `1.2.28`、Guava `33.8.0-jre`、Commons IO `2.21.0`、OkHttp `4.12.0`、维护版 JSch `2.28.8`；Groovy/Mockito/JUnit 等由 Boot 管理 |
 | CGLIB 示例 | 使用 Spring 维护的 CGLIB，在 JDK 17 下无需额外 `--add-opens` |
 
-Elasticsearch 6/7 和 Jest `6.3.1` 是保留旧协议的学习示例，并非现代 ES 服务端接入模板；升级 ES 8/9 需要另行迁移客户端 API。
+Elasticsearch 示例现要求 ES 7 服务端，不再兼容 ES 6 集群；TransportClient 和 Jest `6.3.1` 仍是旧 API 学习示例，并非现代 ES 服务端接入模板，升级 ES 8/9 需要另行迁移客户端 API。
 Jest 配置示例原有 `@Configuration` 仍被注释，真实集成测试前需自行补齐客户端 Bean。Shiro 的 JWT 用户名提取和验签也仍是未完成的学习示例；当前回归覆盖 Realm 登录与权限、匿名路由和缺 token 拒绝，不代表完整 JWT 认证可用。
 RocketMQ Spring 内部仍使用 Jackson 2 转换消息，与应用的 Jackson 3 并存；隔离测试检查了原有消息字段的往返兼容。
 公共库 3.x 已移除 Swagger/Knife4j 自动集成，仓库原有注释示例与旧 `knife4j.info` 配置不会生成文档端点。
@@ -101,7 +101,7 @@ data为数据结构和算法模块,现在正在学习中.
 
 ## elasticsearch
 
-ES 6.x API 实践，当前客户端为 6.8.23
+原 ES 6.x API 实践已迁移至 ES 7.17.29，保留 Transport/REST 客户端和索引、映射、查询示例；连接目标需使用 ES 7 集群。
 
 ## elasticsearch-7.6
 

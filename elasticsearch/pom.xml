@@ -12,7 +12,7 @@
     <artifactId>elasticsearch</artifactId>
 
     <properties>
-        <elasticsearch.version>6.8.23</elasticsearch.version>
+        <elasticsearch.version>7.17.29</elasticsearch.version>
         <!-- TransportClient uses Netty 4.1 APIs; keep it off the Boot 4 Netty 4.2 line. -->
         <netty.version>4.1.140.Final</netty.version>
     </properties>
