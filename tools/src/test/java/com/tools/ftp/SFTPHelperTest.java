@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
  * @author yslao@outlook.com
  * @since 2021/12/27
  */
+@org.junit.jupiter.api.Tag("manual")
 class SFTPHelperTest {
 
     private Logger logger = LoggerFactory.getLogger(SFTPHelperTest.class);

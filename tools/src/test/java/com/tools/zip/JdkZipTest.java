@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
  * @author yslao@outlook.com
  * @since 2021/12/24
  */
+@org.junit.jupiter.api.Tag("manual")
 public class JdkZipTest {
 
     @Disabled

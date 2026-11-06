@@ -1,13 +1,13 @@
 package com.test.config.redis;
 
-import com.fasterxml.jackson.databind.JavaType;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.type.TypeFactory;
+import tools.jackson.databind.JavaType;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.SerializationException;
-import org.springframework.lang.Nullable;
+import org.jspecify.annotations.Nullable;
 import org.springframework.util.Assert;
 
 public class CustomizeJacksonRedisSerializer<T> implements RedisSerializer<T> {
@@ -16,7 +16,7 @@ public class CustomizeJacksonRedisSerializer<T> implements RedisSerializer<T> {
 
     private final JavaType javaType;
 
-    private ObjectMapper objectMapper = new ObjectMapper();
+    private ObjectMapper objectMapper = JsonMapper.builder().configureForJackson2().build();
 
     public CustomizeJacksonRedisSerializer(Class<T> type) {
         this.javaType = getJavaType(type);
@@ -30,10 +30,9 @@ public class CustomizeJacksonRedisSerializer<T> implements RedisSerializer<T> {
         if (bytes == null || bytes.length == 0) {
             return null;
         }
-        String originStr = new String(bytes);
+        String originStr = new String(bytes, DEFAULT_CHARSET);
         if (originStr.startsWith("{") && originStr.endsWith("}")) {
             try {
-                this.objectMapper.readValue(originStr, javaType);
                 return (T) this.objectMapper.readValue(bytes, 0, bytes.length, javaType);
             } catch (Exception ex) {
                 throw new SerializationException("Could not read JSON: " + ex.getMessage(), ex);
@@ -51,7 +50,7 @@ public class CustomizeJacksonRedisSerializer<T> implements RedisSerializer<T> {
         }
         try {
             if (t instanceof String) {
-                return ((String) t).getBytes();
+                return ((String) t).getBytes(DEFAULT_CHARSET);
             }
             return this.objectMapper.writeValueAsBytes(t);
         } catch (Exception ex) {
@@ -66,6 +65,6 @@ public class CustomizeJacksonRedisSerializer<T> implements RedisSerializer<T> {
     }
 
     protected JavaType getJavaType(Class<?> clazz) {
-        return TypeFactory.defaultInstance().constructType(clazz);
+        return objectMapper.constructType(clazz);
     }
 }

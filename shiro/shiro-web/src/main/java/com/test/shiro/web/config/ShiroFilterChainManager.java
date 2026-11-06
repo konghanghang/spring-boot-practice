@@ -1,9 +1,10 @@
 package com.test.shiro.web.config;
 
+import com.test.shiro.web.filter.JwtStatelessFilter;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
-import javax.servlet.Filter;
+import jakarta.servlet.Filter;
 import java.util.*;
 
 /**
@@ -18,6 +19,7 @@ public class ShiroFilterChainManager {
      */
     public Map<String, Filter> initFilters() {
         Map<String, Filter> filters = new LinkedHashMap<>();
+        filters.put("jwt", new JwtStatelessFilter());
         return filters;
     }
 

@@ -1,12 +1,16 @@
 package com.ioc.annotation;
 
 import com.ioc.Person;
+import com.ioc.dao.BookDao;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.FilterType;
+import org.springframework.context.annotation.Import;
 
 @Configuration
+// 自定义过滤器只匹配类名中的 er；显式补齐 BookService 所需的 DAO。
+@Import(BookDao.class)
 // 包扫描，排除规则
 /*@ComponentScan(value = "com.ioc", excludeFilters = {
         @ComponentScan.Filter(type = FilterType.ANNOTATION, value = {Controller.class})

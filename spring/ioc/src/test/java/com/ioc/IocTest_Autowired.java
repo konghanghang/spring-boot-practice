@@ -3,7 +3,7 @@ package com.ioc;
 import com.ioc.config.MainConfigOfAutowired;
 import com.ioc.dao.BookDao;
 import com.ioc.service.BookService;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 public class IocTest_Autowired {

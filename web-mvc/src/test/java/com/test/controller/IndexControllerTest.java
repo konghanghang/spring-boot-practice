@@ -1,23 +1,29 @@
 package com.test.controller;
 
 import com.test.service.IndexService;
+import com.test.service.bark.BarkService;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.info.GitProperties;
+import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-@WebMvcTest(IndexController.class)
+@WebMvcTest(controllers = IndexController.class, properties = "logging.file=target/test-logs/web-mvc-slice")
 class IndexControllerTest {
 
     @Autowired
     private IndexController indexController;
-    @MockBean
+    @MockitoBean
     private IndexService indexService;
+    @MockitoBean
+    private BarkService barkService;
+    @MockitoBean
+    private GitProperties gitProperties;
     @Autowired
     private MockMvc mockMvc;
     /*@Autowired

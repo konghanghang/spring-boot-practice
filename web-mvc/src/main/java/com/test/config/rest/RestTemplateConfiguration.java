@@ -6,7 +6,7 @@ import okhttp3.ConnectionPool;
 import okhttp3.OkHttpClient;
 import okhttp3.OkHttpClient.Builder;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
-import org.springframework.http.client.OkHttp3ClientHttpRequestFactory;
+import com.iminling.core.config.rest.OkHttpClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
 
 /**
@@ -31,7 +31,7 @@ public class RestTemplateConfiguration {
             .writeTimeout(10000, TimeUnit.MILLISECONDS)
             .retryOnConnectionFailure(true)
             .connectionPool(new ConnectionPool(50, 100, TimeUnit.SECONDS)).build();
-        OkHttp3ClientHttpRequestFactory okHttp3ClientHttpRequestFactory = new OkHttp3ClientHttpRequestFactory(okHttpClient);
+        OkHttpClientHttpRequestFactory okHttp3ClientHttpRequestFactory = new OkHttpClientHttpRequestFactory(okHttpClient);
         RestTemplate restTemplate = new EnhanceRestTemplate();
         restTemplate.setRequestFactory(okHttp3ClientHttpRequestFactory);
         List<ClientHttpRequestInterceptor> interceptors = restTemplate.getInterceptors();

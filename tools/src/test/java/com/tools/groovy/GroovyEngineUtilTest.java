@@ -19,17 +19,21 @@ class GroovyEngineUtilTest {
 
     private ExecutorService executorService = Executors.newFixedThreadPool(10);
 
+    @org.junit.jupiter.api.AfterEach
+    void shutdownExecutor() { executorService.shutdownNow(); }
+
     @Test
     void evalScript_scriptStr() {
 
         String script = "return input";
         long l = System.currentTimeMillis();
         for (int i = 0; i < 10; i++) {
-            System.out.println(GroovyEngineUtil.evalScript(script, i + ""));
+            assertEquals(i + "", GroovyEngineUtil.evalScript(script, i + ""));
         }
         System.out.println("执行耗时：" + (System.currentTimeMillis() - l));
     }
 
+    @org.junit.jupiter.api.Tag("manual")
     @Test
     void evalScript_scriptObj() throws InterruptedException {
 
@@ -57,6 +61,7 @@ class GroovyEngineUtilTest {
         System.out.println("执行耗时：" + (System.currentTimeMillis() - l));
     }
 
+    @org.junit.jupiter.api.Tag("manual")
     @Test
     void evalScript_groovyObj() throws InterruptedException, InstantiationException, IllegalAccessException {
         GroovyClassLoader groovyClassLoader = new GroovyClassLoader();

@@ -2,7 +2,7 @@ package com.ioc;
 
 import com.ioc.annotation.MainConfig;
 import com.ioc.annotation.MainConfig2;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.core.env.ConfigurableEnvironment;
 
@@ -43,9 +43,9 @@ public class IocTest {
         for (String name : beanDefinitionNames) {
             System.out.println(name);
         }
-        final Person bean = context.getBean(Person.class);
-        final Person bean1 = context.getBean(Person.class);
-        System.out.println(bean == bean1);
+        final Person bean = context.getBean("person", Person.class);
+        final Person bean1 = context.getBean("person", Person.class);
+        org.junit.jupiter.api.Assertions.assertSame(bean, bean1);
     }
 
     @Test

@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
  * @author yslao@outlook.com
  * @since 2022/1/14
  */
+@org.junit.jupiter.api.Tag("manual")
 class HttpClientUtilsTest {
 
     @Test

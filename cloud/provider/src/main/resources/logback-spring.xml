@@ -3,10 +3,10 @@
 
 	<include resource="org/springframework/boot/logging/logback/defaults.xml"/>
 	<springProperty name="APP_NAME" scope="context" source="spring.application.name" defaultValue="web"/>
-	<springProperty name="LOG_FILE" scope="context" source="logging.file" defaultValue="logs/${APP_NAME}"/>
+	<springProperty name="LOG_FILE" scope="context" source="logging.file.name" defaultValue="logs/${APP_NAME}"/>
 
 	<!-- 日志格式 -->
-	<property name="CONSOLE_LOG_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS} %clr(%-5level) [%15.15t] %clr(${PID:- }) [%yellow(%X{X-B3-TraceId}),%green(%X{X-B3-SpanId}),%blue(%X{X-B3-ParentSpanId})] %clr(%-40.40logger{39}){cyan} :%clr(%-4L) - %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}}" />
+	<property name="CONSOLE_LOG_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS} %clr(%-5level) [%15.15t] %clr(${PID:- }) [%yellow(%X{traceId}),%green(%X{spanId})] %clr(%-40.40logger{39}){cyan} :%clr(%-4L) - %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}" />
 
 	<!-- Appender to log to console -->
 	<appender name="console" class="ch.qos.logback.core.ConsoleAppender">

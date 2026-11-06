@@ -2,7 +2,7 @@ package com.test.service.cache;
 
 import com.github.benmanes.caffeine.cache.Caffeine;
 import java.util.UUID;
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;

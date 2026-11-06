@@ -7,16 +7,15 @@ spring:
     url: jdbc:mysql://127.0.0.1:3306/jpa?serverTimezone=UTC&characterEncoding=UTF-8&useSSL=false
     username: root
     password: konghang123
-    driver-class-name: com.mysql.jdbc.Driver
+    driver-class-name: com.mysql.cj.jdbc.Driver
     type: com.zaxxer.hikari.HikariDataSource
   #jpa的配置
   jpa:
     database: MYSQL
     hibernate:
       ddl-auto: update
-      naming:
-        strategy: org.hibernate.cfg.ImprovedNamingStrategy
     properties:
       hibernate:
+        column_ordering_strategy: com.test.jpa.config.StudentColumnOrderingStrategy
         dialect: com.test.jpa.config.MySQL5DialectUtf8mb4
     show-sql: true

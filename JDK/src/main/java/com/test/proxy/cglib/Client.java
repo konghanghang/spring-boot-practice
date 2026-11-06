@@ -2,7 +2,7 @@ package com.test.proxy.cglib;
 
 import com.test.proxy.RealSubject;
 import com.test.proxy.Subject;
-import net.sf.cglib.proxy.Enhancer;
+import org.springframework.cglib.proxy.Enhancer;
 
 /**
  * @author yslao@outlook.com

@@ -1,6 +1,7 @@
 package com.test.shiro.web.config;
 
 import com.test.shiro.web.config.rest.StatelessDefaultSubjectFactory;
+import com.test.shiro.web.config.rest.RestShiroFilterFactoryBean;
 import com.test.shiro.web.realm.WebRealm;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.mgt.DefaultSessionStorageEvaluator;
@@ -97,7 +98,7 @@ public class ShiroConfig {
      */
     @Bean
     public ShiroFilterFactoryBean shiroFilter(SecurityManager securityManager, ShiroFilterChainManager chainManager) {
-        ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
+        ShiroFilterFactoryBean shiroFilterFactoryBean = new RestShiroFilterFactoryBean();
         // 必须设置 SecurityManager
         shiroFilterFactoryBean.setSecurityManager(securityManager);
         // 设置自定义filter

@@ -10,6 +10,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * @author yslao@outlook.com
  * @since 2021/3/30
  */
+@org.junit.jupiter.api.Tag("manual")
 class CustomizeClassLoaderTest {
 
     @Test

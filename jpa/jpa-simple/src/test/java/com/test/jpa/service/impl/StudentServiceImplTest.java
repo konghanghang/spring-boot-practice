@@ -1,65 +1,81 @@
 package com.test.jpa.service.impl;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import com.test.jpa.dao.StudentRepository;
 import com.test.jpa.model.Student;
+import jakarta.persistence.EntityManager;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import javax.sql.DataSource;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.domain.Sort.Direction;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.annotation.Resource;
-import java.util.List;
-import java.util.Optional;
-
-@ExtendWith(SpringExtension.class )
-@SpringBootTest
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE)
+@ActiveProfiles("test")
+@Transactional
 class StudentServiceImplTest {
 
-    @Resource
+    @Autowired
     private StudentRepository studentRepository;
+    @Autowired
+    private EntityManager entityManager;
+    @Autowired
+    private DataSource dataSource;
 
     @Test
-    void add() {
+    void persistsAllFieldsAndQueriesByDerivedHqlAndNativeQueries() {
+        Student student = student("13100000000", "张三", LocalDateTime.of(2026, 1, 2, 3, 4, 5));
+        studentRepository.saveAndFlush(student);
+        Long id = student.getId();
+        assertThat(id).isPositive();
+        entityManager.clear();
+
+        Student loaded = studentRepository.findById(id).orElseThrow();
+        assertThat(loaded).usingRecursiveComparison().isEqualTo(student);
+        assertThat(studentRepository.findByNumber(student.getNumber()).getId()).isEqualTo(id);
+        assertThat(studentRepository.queryByNameUseHQL(student.getName()).getId()).isEqualTo(id);
+        assertThat(studentRepository.queryByNameUseSQL(student.getName()).getId()).isEqualTo(id);
+    }
+
+    @Test
+    void sortsByCreateTimeAndPreservesDeclarationOrderDdl() throws Exception {
+        LocalDateTime now = LocalDateTime.of(2026, 1, 2, 3, 4, 5);
+        Student older = studentRepository.save(student("13100000001", "李四", now.minusDays(1)));
+        Student newer = studentRepository.save(student("13100000002", "王五", now));
+        studentRepository.flush();
+        entityManager.clear();
+
+        assertThat(studentRepository.findAll(Sort.by(Sort.Direction.DESC, "createTime")))
+            .extracting(Student::getId).containsExactly(newer.getId(), older.getId());
+
+        try (Connection connection = dataSource.getConnection()) {
+            assertThat(connection.getMetaData().getURL()).startsWith("jdbc:h2:mem:");
+            List<String> columns = new ArrayList<>();
+            try (ResultSet result = connection.getMetaData().getColumns(null, null, "STUDENT", null)) {
+                while (result.next()) {
+                    columns.add(result.getString("COLUMN_NAME"));
+                }
+            }
+            assertThat(columns).containsExactly("ID", "NUMBER", "NAME", "SEX", "EMAIL", "REMARK", "CREATE_TIME");
+        }
+    }
+
+    private Student student(String number, String name, LocalDateTime created) {
         Student student = new Student();
-        student.setNumber("13100000000");
-        student.setName("张三");
+        student.setNumber(number);
+        student.setName(name);
         student.setSex(1);
-        student.setEmail("aa@aa.com");
-        student.setRemark("================");
-        studentRepository.save(student);
+        student.setEmail("student@example.test");
+        student.setRemark("中文与 emoji 😀");
+        student.setCreateTime(created);
+        return student;
     }
-
-    @Test
-    void find() {
-        Optional<Student> student = studentRepository.findById(1L);
-        student.ifPresent(s -> System.out.println(s));
-    }
-
-    @Test
-    void findAll() {
-        Sort sort = Sort.by(new Sort.Order(Direction.DESC, "createTime"));
-        List<Student> all = studentRepository.findAll(sort);
-        System.out.println(all);
-    }
-
-    @Test
-    void findByNumber() {
-        Student student = studentRepository.findByNumber("13100000000");
-        System.out.println(student);
-    }
-
-    @Test
-    void queryByNameUseHQL() {
-        Student student = studentRepository.queryByNameUseHQL("张三");
-        System.out.println(student);
-    }
-
-    @Test
-    void queryByNameUseSQL() {
-        Student student = studentRepository.queryByNameUseSQL("张三");
-        System.out.println(student);
-    }
-
 }

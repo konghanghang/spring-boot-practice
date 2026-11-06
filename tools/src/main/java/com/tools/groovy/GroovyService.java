@@ -2,13 +2,13 @@ package com.tools.groovy;
 
 import com.iminling.common.crypto.MD5Utils;
 import groovy.lang.GroovyObject;
+import jakarta.annotation.PreDestroy;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import lombok.extern.slf4j.Slf4j;
-import org.checkerframework.checker.nullness.qual.NonNull;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +22,11 @@ public class GroovyService implements InitializingBean {
 
     // 动态刷新脚本
     private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+
+    @PreDestroy
+    public void shutdown() {
+        scheduler.shutdownNow();
+    }
 
     public String evalScript(String key) {
         GroovyScrip groovyScrip = groovyScripMap.get(key);
@@ -39,8 +44,8 @@ public class GroovyService implements InitializingBean {
     public void refresh() {
         // 获取所有可用配置
         // groovyScrips.addAll()
-        Set<@NonNull String> oldKey = new HashSet<>(groovyScripMap.keySet());
-        Set<@NonNull String> oldScriptKey = new HashSet<>(GroovyEngineUtil.getGROOVY_OBJECT_MAP().keySet());
+        Set<String> oldKey = new HashSet<>(groovyScripMap.keySet());
+        Set<String> oldScriptKey = new HashSet<>(GroovyEngineUtil.getGROOVY_OBJECT_MAP().keySet());
         groovyScrips.forEach(e -> {
             // 如果能删除，则代表是有效Key，否则为无效Key，会在后续清除
             oldKey.remove(e.getKey());

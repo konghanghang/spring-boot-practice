@@ -4,6 +4,7 @@ import com.tools.ip.ipv6.Ipv6Service;
 import java.math.BigInteger;
 import org.junit.jupiter.api.Test;
 
+@org.junit.jupiter.api.Tag("manual")
 public class V6Test {
 
     /**

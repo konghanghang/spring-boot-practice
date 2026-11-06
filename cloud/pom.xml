@@ -14,9 +14,8 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <spring.cloud-version>2021.0.3</spring.cloud-version>
-        <spring.alibaba.cloud-version>2021.0.1.0</spring.alibaba.cloud-version>
-        <base.core-version>2022.0.8-SNAPSHOT</base.core-version>
+        <spring.cloud-version>2025.1.4</spring.cloud-version>
+        <spring.alibaba.cloud-version>2025.1.0.0</spring.alibaba.cloud-version>
     </properties>
 
     <modules>
@@ -49,20 +48,9 @@
         <plugins>
             <!--https://blog.csdn.net/mytt_10566/article/details/100116670-->
             <plugin>
-                <groupId>pl.project13.maven</groupId>
-                <artifactId>git-commit-id-plugin</artifactId>
-                <version>4.0.0</version>
-                <executions>
-                    <execution>
-                        <id>get-the-git-infos</id>
-                        <!-- 默认绑定阶段initialize -->
-                        <phase>initialize</phase>
-                        <goals>
-                            <!-- 目标：revision -->
-                            <goal>revision</goal>
-                        </goals>
-                    </execution>
-                </executions>
+                <groupId>io.github.git-commit-id</groupId>
+                <artifactId>git-commit-id-maven-plugin</artifactId>
+                <version>9.0.2</version>
                 <configuration>
                     <!--<dotGitDirectory>${project.basedir}/.git</dotGitDirectory>-->
                     <!--<generateGitPropertiesFilename>${project.build.outputDirectory}/git.json</generateGitPropertiesFilename>-->

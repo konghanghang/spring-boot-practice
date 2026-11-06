@@ -7,7 +7,7 @@ import com.test.es.model.MappingFieldInfo;
 import com.test.es.service.IEsService;
 import java.io.IOException;
 import java.util.*;
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpStatus;
 import org.elasticsearch.action.admin.cluster.state.ClusterStateResponse;

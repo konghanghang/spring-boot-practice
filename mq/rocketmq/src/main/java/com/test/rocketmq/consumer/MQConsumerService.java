@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.rocketmq.common.message.MessageExt;
 import org.apache.rocketmq.spring.annotation.RocketMQMessageListener;
 import org.apache.rocketmq.spring.core.RocketMQListener;
-import org.springframework.boot.autoconfigure.security.SecurityProperties.User;
+import com.test.rocketmq.model.User;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 

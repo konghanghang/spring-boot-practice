@@ -3,7 +3,7 @@ package com.test.cloud.controller;
 import com.test.cloud.feign.IBizCustomizeService;
 import com.test.cloud.feign.IBizService;
 import com.test.cloud.model.User;
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;

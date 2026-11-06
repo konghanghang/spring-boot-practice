@@ -1,7 +1,7 @@
 package com.test;
 
 import java.io.IOException;
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 import org.apache.http.util.EntityUtils;
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.search.SearchResponse;
@@ -12,8 +12,10 @@ import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.junit.jupiter.api.Tag;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+@Tag("integration")
 @SpringBootTest
 @ExtendWith(SpringExtension.class)
 public class EsTest {

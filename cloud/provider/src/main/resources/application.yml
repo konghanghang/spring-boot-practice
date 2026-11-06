@@ -6,9 +6,30 @@ server:
   port: 8001
   address: 0.0.0.0
 
+# provider 实现共享的 @FeignClient 接口，但自身不创建 Feign 客户端。
+# 关闭 core 的客户端 MVC 排除规则，保留这些实现类的 Controller 映射。
+app:
+  customize:
+    feign: false
+
 spring:
-  mvc:
-    throw-exception-if-no-handler-found: true
+  application:
+    name: provider
+  cloud:
+    nacos:
+      discovery:
+        enabled: ${NACOS_DISCOVERY_ENABLED:false}
+        server-addr: ${NACOS_SERVER_ADDR:localhost:8848}
+        namespace: ${NACOS_NAMESPACE:}
+      config:
+        enabled: false
+        server-addr: ${NACOS_SERVER_ADDR:localhost:8848}
+        namespace: ${NACOS_NAMESPACE:}
+
+management:
+  tracing:
+    propagation:
+      type: b3_multi
 
 # http://1127.0.0.1:8001/actuator/info
 info:
@@ -16,6 +37,3 @@ info:
   company.name: cloud
   build.artifactId: $project.artifactId$
   build.version: $project.version$
-knife4j:
-  info:
-    enable: false

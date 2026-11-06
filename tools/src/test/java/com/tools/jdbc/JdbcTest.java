@@ -6,6 +6,7 @@ import com.tools.jdbc.tool.JdbcUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+@org.junit.jupiter.api.Tag("manual")
 public class JdbcTest {
 
     @Test

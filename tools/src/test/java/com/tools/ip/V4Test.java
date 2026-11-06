@@ -3,6 +3,7 @@ package com.tools.ip;
 import com.tools.ip.ipv4.Ipv4Service;
 import org.junit.jupiter.api.Test;
 
+@org.junit.jupiter.api.Tag("manual")
 public class V4Test {
 
     private String file = "D:\\project\\idea\\spring-boot-demo\\tools\\src\\main\\resources\\qqwry.dat";

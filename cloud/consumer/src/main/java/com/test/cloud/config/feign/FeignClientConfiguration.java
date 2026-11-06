@@ -1,31 +1,36 @@
 package com.test.cloud.config.feign;
 
 import com.iminling.common.http.OkHttpUtils;
+import com.iminling.core.config.feign.client.CustomizeFeignClient;
 import com.test.cloud.config.feign.decode.ResponseDecoder;
 import feign.Client;
 import feign.codec.Decoder;
 import okhttp3.OkHttpClient;
-import org.springframework.beans.factory.ObjectFactory;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.boot.autoconfigure.http.HttpMessageConverters;
-import org.springframework.boot.autoconfigure.web.servlet.WebMvcRegistrations;
-import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.boot.autoconfigure.condition.SearchStrategy;
+import org.springframework.cloud.openfeign.support.FeignHttpMessageConverters;
+import org.springframework.cloud.openfeign.support.HttpMessageConverterCustomizer;
+import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
+import org.springframework.cloud.loadbalancer.support.LoadBalancerClientFactory;
+import org.springframework.cloud.openfeign.loadbalancer.FeignBlockingLoadBalancerClient;
+import org.springframework.cloud.openfeign.loadbalancer.LoadBalancerFeignRequestTransformer;
 import org.springframework.cloud.openfeign.support.ResponseEntityDecoder;
 import org.springframework.cloud.openfeign.support.SpringDecoder;
 import org.springframework.context.annotation.Bean;
-import org.springframework.core.annotation.AnnotatedElementUtils;
-import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
+import org.springframework.http.converter.json.JacksonJsonHttpMessageConverter;
+import tools.jackson.databind.json.JsonMapper;
 
 /**
  * @author yslao@outlook.com
  * @since 2022/4/24
  */
-// @Configuration
+// 只由 @EnableFeignClients.defaultConfiguration 导入到 Feign 子容器。
 public class FeignClientConfiguration {
 
-    private final ObjectFactory<HttpMessageConverters> messageConverters;
+    private final ObjectProvider<FeignHttpMessageConverters> messageConverters;
 
-    public FeignClientConfiguration(ObjectFactory<HttpMessageConverters> messageConverters) {
+    public FeignClientConfiguration(ObjectProvider<FeignHttpMessageConverters> messageConverters) {
         this.messageConverters = messageConverters;
     }
 
@@ -36,35 +41,22 @@ public class FeignClientConfiguration {
     }
 
     @Bean
-    @ConditionalOnMissingBean
-    public Client feignClient() {
-        OkHttpClient okHttpClient = OkHttpUtils.Companion.okHttpClientBuilder()
+    @ConditionalOnMissingBean(value = Client.class, search = SearchStrategy.CURRENT)
+    public Client feignClient(LoadBalancerClient loadBalancerClient,
+                             LoadBalancerClientFactory loadBalancerClientFactory,
+                             ObjectProvider<LoadBalancerFeignRequestTransformer> transformers) {
+        OkHttpClient okHttpClient = OkHttpUtils.okHttpClientBuilder()
             .retryOnConnectionFailure(false).build();
-        // CustomizeFeignClient feignOkHttpClient = new CustomizeFeignClient(okHttpClient);
-        return new feign.okhttp.OkHttpClient(okHttpClient);
-        // return new LoadBalancerFeignClient(feignOkHttpClient, cachingFactory, clientFactory);
+        return new FeignBlockingLoadBalancerClient(new CustomizeFeignClient(okHttpClient),
+                loadBalancerClient, loadBalancerClientFactory, transformers.orderedStream().toList());
     }
 
-    /**
-     * 处理：@FeignClient中的@RequestMapping也被SpringMVC加载的问题解决
-     * @return
-     */
+    // 使用与 MVC 相同的 core mapper，保留 Long、日期和 ResultModel 的 JSON 约定。
     @Bean
-    public WebMvcRegistrations feignWebRegistrations() {
-        return new WebMvcRegistrations() {
-            @Override
-            public RequestMappingHandlerMapping getRequestMappingHandlerMapping() {
-                return new FeignRequestMappingHandlerMapping();
-            }
-        };
-    }
-
-    private static class FeignRequestMappingHandlerMapping extends RequestMappingHandlerMapping {
-        @Override
-        protected boolean isHandler(Class<?> beanType) {
-            return super.isHandler(beanType) &&
-                !AnnotatedElementUtils.isAnnotated(beanType, FeignClient.class);
-        }
+    public HttpMessageConverterCustomizer coreJsonMessageConverterCustomizer(JsonMapper mapper) {
+        return converters -> converters.replaceAll(converter ->
+                converter instanceof JacksonJsonHttpMessageConverter
+                        ? new JacksonJsonHttpMessageConverter(mapper) : converter);
     }
 
 }

@@ -1,7 +1,7 @@
 package com.test.snapshot;
 
 import java.util.List;
-import javax.annotation.Resource;
+import jakarta.annotation.Resource;
 import org.apache.commons.lang3.StringUtils;
 import org.elasticsearch.action.admin.cluster.repositories.verify.VerifyRepositoryResponse;
 import org.elasticsearch.action.admin.cluster.snapshots.create.CreateSnapshotResponse;
@@ -13,7 +13,7 @@ import org.elasticsearch.action.admin.cluster.snapshots.status.SnapshotsStatusRe
 import org.elasticsearch.action.support.master.AcknowledgedResponse;
 import org.elasticsearch.client.ClusterAdminClient;
 import org.elasticsearch.client.transport.TransportClient;
-import org.elasticsearch.cluster.metadata.RepositoryMetaData;
+import org.elasticsearch.cluster.metadata.RepositoryMetadata;
 import org.elasticsearch.common.settings.Settings;
 import org.elasticsearch.rest.RestStatus;
 import org.elasticsearch.snapshots.Snapshot;
@@ -22,12 +22,14 @@ import org.elasticsearch.snapshots.SnapshotInfo;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.junit.jupiter.api.Tag;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 /**
  * 参考地址：https://dzone.com/articles/how-use-elasticsearch-snapshot
  * https://blog.csdn.net/yangshangwei/article/details/104072859?utm_medium=distribute.pc_relevant_t0.none-task-blog-BlogCommendFromMachineLearnPai2-1.nonecase&depth_1-utm_source=distribute.pc_relevant_t0.none-task-blog-BlogCommendFromMachineLearnPai2-1.nonecase
  */
+@Tag("integration")
 @SpringBootTest
 @ExtendWith(SpringExtension.class)
 public class SnapshotTest {
@@ -41,11 +43,11 @@ public class SnapshotTest {
     @Test
     public void getRepository() {
         ClusterAdminClient cluster = client.admin().cluster();
-        List<RepositoryMetaData> repositories = cluster.prepareGetRepositories()
+        List<RepositoryMetadata> repositories = cluster.prepareGetRepositories()
                 // 可以指定需要查看的仓库的名称
                 .addRepositories("security_repository1")
                 .get().repositories();
-        for (RepositoryMetaData repository : repositories) {
+        for (RepositoryMetadata repository : repositories) {
             System.out.println(repository.name());
             //hdfs
             System.out.println(repository.type());

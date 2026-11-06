@@ -1,0 +1,8 @@
+# 显式启用 nacos-config profile 后才读取远端配置。
+spring:
+  config:
+    import: "optional:nacos:${NACOS_CONFIG_DATA_ID:consumer.yml}?group=${NACOS_GROUP:DEFAULT_GROUP}&refreshEnabled=true"
+  cloud:
+    nacos:
+      config:
+        enabled: true

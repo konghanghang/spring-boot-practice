@@ -50,6 +50,7 @@ class HuffManTreeTest {
 
     @DisplayName("利用哈夫曼编码压缩文件")
     @Test
+    @org.junit.jupiter.api.Tag("manual")
     void zipFile() {
         String src = "/Users/konghang/010616202068.pdf";
         String dist = "/Users/konghang/010616202068.kong";
@@ -60,6 +61,7 @@ class HuffManTreeTest {
 
     @DisplayName("解压压缩的文件")
     @Test
+    @org.junit.jupiter.api.Tag("manual")
     void unzipFile() {
         String zip = "/Users/konghang/010616202068.kong";
         String dist = "/Users/konghang/test.pdf";

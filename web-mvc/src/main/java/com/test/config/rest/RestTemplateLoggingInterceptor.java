@@ -1,6 +1,6 @@
 package com.test.config.rest;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.ObjectMapper;
 import com.iminling.common.json.JsonUtil;
 import com.iminling.core.config.value.ResultModel;
 import com.iminling.core.util.ThreadContext;
@@ -12,7 +12,7 @@ import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpRequest;
-import org.springframework.http.client.AbstractClientHttpResponse;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.client.ClientHttpRequestExecution;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.client.ClientHttpResponse;
@@ -41,18 +41,20 @@ public class RestTemplateLoggingInterceptor implements ClientHttpRequestIntercep
         return clientHttpResponseWrapper;
     }
 
-    static class ClientHttpResponseWrapper extends AbstractClientHttpResponse {
+    static class ClientHttpResponseWrapper implements ClientHttpResponse {
 
-        private ClientHttpResponse response;
+        private final ClientHttpResponse response;
+        private final HttpHeaders headers = new HttpHeaders();
         private InputStream inputStream;
 
         ClientHttpResponseWrapper(ClientHttpResponse response) {
             this.response = response;
+            this.headers.putAll(response.getHeaders());
         }
 
         @Override
-        public int getRawStatusCode() throws IOException {
-            return this.response.getRawStatusCode();
+        public HttpStatusCode getStatusCode() throws IOException {
+            return this.response.getStatusCode();
         }
 
         @Override
@@ -75,7 +77,7 @@ public class RestTemplateLoggingInterceptor implements ClientHttpRequestIntercep
         @Override
         public InputStream getBody() throws IOException {
             if (inputStream == null) {
-                if (Boolean.valueOf(Optional.ofNullable(ThreadContext.Companion.getAttribute("resultModel")).map(Object::toString).orElse("true"))) {
+                if (Boolean.valueOf(Optional.ofNullable(ThreadContext.getAttribute("resultModel")).map(Object::toString).orElse("true"))) {
                     inputStream = response.getBody();
                     return inputStream;
                 }
@@ -93,7 +95,7 @@ public class RestTemplateLoggingInterceptor implements ClientHttpRequestIntercep
 
         @Override
         public HttpHeaders getHeaders() {
-            return this.response.getHeaders();
+            return this.headers;
         }
 
     }

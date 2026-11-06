@@ -1,31 +1,45 @@
 server:
   port: 8080
 
+# Decoder 必须在 Feign 子容器中获取消息转换器；本模块显式配置客户端。
+app:
+  customize:
+    feign: false
+
 spring:
+  application:
+    name: consumer
   profiles:
     active: dev
+  cloud:
+    nacos:
+      discovery:
+        enabled: ${NACOS_DISCOVERY_ENABLED:true}
+        server-addr: ${NACOS_SERVER_ADDR:localhost:8848}
+        namespace: ${NACOS_NAMESPACE:dev}
+      config:
+        enabled: false
+        server-addr: ${NACOS_SERVER_ADDR:localhost:8848}
+        namespace: ${NACOS_NAMESPACE:dev}
+    openfeign:
+      client:
+        config:
+          default:
+            connect-timeout: 16000
+            read-timeout: 16000
+            logger-level: full
 info:
   name: zhangsan
 
-# https://docs.spring.io/spring-cloud-openfeign/docs/2.2.5.RELEASE/reference/html/#spring-cloud-feign-overriding-defaults
-feign:
-  client:
-    config:
-      default:
-        # 超时时间
-        connect-timeout: 16000
-        read-timeout: 16000
-        logger-level: full
 logging:
   level:
     com.test.cloud.feign.iBizService: debug
 
 management:
+  tracing:
+    propagation:
+      type: b3_multi
   endpoints:
     web:
       exposure:
         include: '*'
-
-knife4j:
-  info:
-    enable: false

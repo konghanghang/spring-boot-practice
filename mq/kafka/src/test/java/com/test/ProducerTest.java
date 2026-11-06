@@ -5,6 +5,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Tag;
 
 import java.util.Arrays;
 import java.util.Objects;
@@ -14,6 +15,7 @@ import java.util.Properties;
  * @author yslao@outlook.com
  * @since 2021/3/25
  */
+@Tag("integration")
 public class ProducerTest {
 
     private Properties properties = null;

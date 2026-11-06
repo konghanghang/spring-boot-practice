@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <!-- RocketMQ 的独立日志只输出到控制台，不在用户主目录创建日志。 -->
+    <appender name="CONSOLE" class="org.apache.rocketmq.logging.ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%level %logger - %msg%n</pattern>
+        </encoder>
+    </appender>
+    <root level="WARN">
+        <appender-ref ref="CONSOLE"/>
+    </root>
+</configuration>

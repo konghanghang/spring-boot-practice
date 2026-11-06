@@ -1,6 +1,10 @@
 package com.test.shiro.web.realm;
 
-import org.apache.shiro.SecurityUtils;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.authc.credential.HashedCredentialsMatcher;
 import org.apache.shiro.mgt.DefaultSecurityManager;
@@ -25,17 +29,22 @@ public class WebRealmTest {
         webRealm.setCredentialsMatcher(credentialsMatcher);
 
         // 主题提交认证请求
-        SecurityUtils.setSecurityManager(defaultSecurityManager);
-        Subject subject = SecurityUtils.getSubject();
+        Subject subject = new Subject.Builder(defaultSecurityManager).buildSubject();
 
         UsernamePasswordToken token = new UsernamePasswordToken("test","1234567");
-        subject.login(token);
-
-        System.out.println(subject.isAuthenticated());
-
-        subject.checkRole("admin");
-
-        subject.checkPermissions("user:delete","user:add");
+        try {
+            subject.login(token);
+            assertTrue(subject.isAuthenticated());
+            subject.checkRole("admin");
+            subject.checkPermissions("user:delete", "user:add");
+            subject.logout();
+            assertFalse(subject.isAuthenticated());
+            assertThrows(IncorrectCredentialsException.class,
+                    () -> subject.login(new UsernamePasswordToken("test", "wrong-password")));
+        } finally {
+            subject.logout();
+            defaultSecurityManager.destroy();
+        }
     }
 
 }

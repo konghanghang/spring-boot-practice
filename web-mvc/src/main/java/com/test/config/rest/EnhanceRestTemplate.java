@@ -13,7 +13,7 @@ import okhttp3.ConnectionPool;
 import okhttp3.OkHttpClient;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.client.ClientHttpRequest;
-import org.springframework.http.client.OkHttp3ClientHttpRequestFactory;
+import com.iminling.core.config.rest.OkHttpClientHttpRequestFactory;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.web.client.RestTemplate;
 
@@ -28,7 +28,7 @@ public class EnhanceRestTemplate extends RestTemplate {
     }
 
     private AntPathMatcher pathMatcher = new AntPathMatcher();
-    private ConcurrentMap<String, OkHttp3ClientHttpRequestFactory> factoryMap = new ConcurrentHashMap<>();
+    private ConcurrentMap<String, OkHttpClientHttpRequestFactory> factoryMap = new ConcurrentHashMap<>();
     {
         pathMatcher.setCaseSensitive(false);
     }
@@ -43,10 +43,10 @@ public class EnhanceRestTemplate extends RestTemplate {
             return super.createRequest(uri, method);
         }
         final UrlProperties urlProperties = optional.get();
-        OkHttp3ClientHttpRequestFactory requestFactory = factoryMap.computeIfAbsent(
+        OkHttpClientHttpRequestFactory requestFactory = factoryMap.computeIfAbsent(
             urlProperties.getUrl(), key -> {
                 OkHttpClient client = build(urlProperties).build();
-                return new OkHttp3ClientHttpRequestFactory(client);
+                return new OkHttpClientHttpRequestFactory(client);
             });
         ClientHttpRequest request = requestFactory.createRequest(uri, method);
         return request;

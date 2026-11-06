@@ -5,7 +5,7 @@ import com.test.shiro.web.config.rest.JwtStatelessToken;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
-import org.apache.shiro.crypto.hash.Md5Hash;
+import org.apache.shiro.crypto.hash.SimpleHash;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 
@@ -64,7 +64,7 @@ public class JwtStatelessRealm extends AuthorizingRealm {
      */
     private String getPasswordByUsername(String username) {
         System.out.println(username);
-        Md5Hash md5Hash = new Md5Hash("1234567","test");
+        SimpleHash md5Hash = new SimpleHash("MD5", "1234567", "test");
         System.out.println(md5Hash.toString());
         return md5Hash.toString();
     }
